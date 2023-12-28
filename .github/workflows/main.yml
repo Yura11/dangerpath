@@ -1,4 +1,5 @@
 name: Build project
+
 on:
   push:
   pull_request:
