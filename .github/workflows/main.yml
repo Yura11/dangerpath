@@ -12,13 +12,13 @@ jobs:
         with:
           lfs: true
 
-      - name: Cache
-        uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
+      #- name: Cache
+      #  uses: actions/cache@v3
+      #  with:
+       #   path: Library
+         # key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+        #  restore-keys: |
+         #   Library-
 
       - name: Build project for Windows
         uses: game-ci/unity-builder@v4
@@ -44,13 +44,13 @@ jobs:
         with:
           lfs: true
 
-      - name: Cache
-        uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
+     # - name: Cache
+      #  uses: actions/cache@v3
+      #  with:
+        #  path: Library
+        #  key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+       #   restore-keys: |
+         #   Library-
 
       - name: Build project for macOS
         uses: game-ci/unity-builder@v4
@@ -76,13 +76,12 @@ jobs:
         with:
           lfs: true
 
-      - name: Cache
-        uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
+     # - name: Cache
+       # uses: actions/cache@v3
+        #path: Library
+         # key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+         # restore-keys: |
+          #  Library-
 
       - name: Build project for Linux
         uses: game-ci/unity-builder@v4
