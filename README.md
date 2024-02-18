@@ -1,3 +1,3 @@
 # dangerpath
 
-![example workflow](https://github.com/Yura11/dangerpath/blob/release/.github/workflows/main.yml/badge.svg)
+[![Actions 😎 - Build for Windows ✨](https://github.com/Yura11/dangerpath/actions/workflows/build-windows.yml/badge.svg?branch=release)](https://github.com/Yura11/dangerpath/actions/workflows/build-windows.yml)
