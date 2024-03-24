@@ -1147,7 +1147,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 364008189}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 449254521}
+        m_TargetAssemblyTypeName: LogOut, Assembly-CSharp
+        m_MethodName: OnClickLogOut
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &364008189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1567,6 +1579,7 @@ GameObject:
   - component: {fileID: 449254519}
   - component: {fileID: 449254518}
   - component: {fileID: 449254520}
+  - component: {fileID: 449254521}
   m_Layer: 5
   m_Name: Profile
   m_TagString: Untagged
@@ -1647,6 +1660,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Panel: {fileID: 449254516}
+--- !u!114 &449254521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 449254516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6613be895c30308499bc6df0bc81db0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  signUp: {fileID: 892545209}
+  username: {fileID: 1125131867}
+  usernametext: {fileID: 2137179164}
 --- !u!1 &478601133
 GameObject:
   m_ObjectHideFlags: 0
@@ -2603,9 +2631,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logInInput: {fileID: 1587162965}
   logInPasswordInput: {fileID: 1968430329}
-  Username: {fileID: 0}
+  Username: {fileID: 1125131867}
   logInText: {fileID: 883196329}
-  Usernametext: {fileID: 0}
+  Usernametext: {fileID: 2137179164}
 --- !u!1 &963897532
 GameObject:
   m_ObjectHideFlags: 0
@@ -2827,6 +2855,7 @@ GameObject:
   - component: {fileID: 1108195091}
   - component: {fileID: 1108195090}
   - component: {fileID: 1108195089}
+  - component: {fileID: 1108195092}
   m_Layer: 0
   m_Name: ProfileButton
   m_TagString: Untagged
@@ -2948,6 +2977,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1108195087}
   m_CullTransparentMesh: 1
+--- !u!114 &1108195092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108195087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a0eda44a4b27d940b450b6ab507358f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SignUp: {fileID: 892545209}
+  Username: {fileID: 1125131867}
+  Usernametext: {fileID: 2137179164}
 --- !u!1 &1114326665
 GameObject:
   m_ObjectHideFlags: 0

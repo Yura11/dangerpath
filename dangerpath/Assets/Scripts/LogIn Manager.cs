@@ -74,7 +74,7 @@ public class LogInManager : MonoBehaviour
                     string beforeColon = responseText.Substring(0, colonIndex);
                     if (beforeColon == "User authenticated successfully! PlayerUsename")
                     {
-                        PlayerProfileManager.gamerNickName = responseText.Substring(colonIndex + 1);
+                        PlayerProfileManager.gamerNickName = responseText.Substring(colonIndex + 2);
                         logInText.text = "LoggedIn!";
                         Debug.Log("Реєстрація успішна!");
                         gameObject.SetActive(false);
