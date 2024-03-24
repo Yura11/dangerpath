@@ -77,7 +77,7 @@ dangerpath/Assets/Scripts/Generated/
 dangerpath/Assets/Scripts/Editor/Generated/
 
 # ParrelSync
-dangerpath_clone_0/
+dangerpath_clone_0/*
 
 # Some Json data
 WebServer/package.json
@@ -87,4 +87,4 @@ WebServer/package-lock.json
 dangerpath/Assets/Resources/privatedata.json
 
 # Surfaces Lite asset
-dangerpath/Assets/Surfaces Lite/
+dangerpath/Assets/Surfaces Lite/*
