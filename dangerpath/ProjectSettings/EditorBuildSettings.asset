@@ -9,24 +9,24 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: dd6247d1e1408a242aa982ea11666e46
   - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/OldScenes/SampleScene.unity
     guid: 06cb356e4e312e54f914b8c30a3e7598
   - enabled: 0
-    path: Assets/Scenes/Game.unity
+    path: Assets/Scenes/OldScenes/Game.unity
     guid: acb03a8d9307010498193073bd1aca37
   - enabled: 0
-    path: Assets/Scenes/Loading screen.unity
+    path: Assets/Scenes/OldScenes/Loading screen.unity
     guid: ac7cabe1f4bc1cd4284cdafb0c638861
   - enabled: 0
-    path: Assets/Scenes/Lobby.unity
+    path: Assets/Scenes/OldScenes/Lobby.unity
     guid: 9f64baea6ee72b340a7f425d0ac1da86
   - enabled: 0
-    path: Assets/Scenes/GameOnline.unity
+    path: Assets/Scenes/OldScenes/GameOnline.unity
     guid: bdf8c21b76b38d7428aafd20e499c430
   - enabled: 0
-    path: Assets/Scenes/GameOver.unity
+    path: Assets/Scenes/OldScenes/GameOver.unity
     guid: 3991fa7d1bc523645b65f561c37947bc
   - enabled: 0
-    path: Assets/Scenes/GameWon.unity
+    path: Assets/Scenes/OldScenes/GameWon.unity
     guid: 55ef28cdba9b3644b8a5011b4464199d
   m_configObjects: {}
