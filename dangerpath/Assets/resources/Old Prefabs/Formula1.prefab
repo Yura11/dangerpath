@@ -10602,7 +10602,7 @@ Transform:
   - {fileID: 5451693653309995280}
   - {fileID: 1554702692561725907}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -126.524}
 --- !u!212 &7698135376164529500
 SpriteRenderer:
@@ -10875,13 +10875,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
+  syncDirection: 1
   syncMode: 0
   syncInterval: 0
   target: {fileID: 1970933315275556217}
   syncPosition: 1
   syncRotation: 1
-  syncScale: 0
+  syncScale: 1
   interpolatePosition: 1
   interpolateRotation: 1
   interpolateScale: 1
@@ -10912,7 +10912,7 @@ MonoBehaviour:
   driftFactor: 0.95
   accelerationFactor: 30
   turnFactor: 3.5
-  maxSpeed: 20
+  maxSpeed: 6
   rotationAngle: 0
   ricochetForce: 10
 --- !u!1001 &6223830490394964002
@@ -10927,6 +10927,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 2187522638829229212, guid: d20cbebd034292540a3524415353832f, type: 3}
+      propertyPath: m_WorldUpOverride
+      value: 
+      objectReference: {fileID: 7715673973885778776}
     - target: {fileID: 4417160706890959738, guid: d20cbebd034292540a3524415353832f, type: 3}
       propertyPath: m_RootOrder
       value: -1

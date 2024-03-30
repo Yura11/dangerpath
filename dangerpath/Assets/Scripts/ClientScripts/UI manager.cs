@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UImanager : MonoBehaviour
 {
@@ -7,6 +8,11 @@ public class UImanager : MonoBehaviour
     public GameObject _sign_In;
     public GameObject _profile;
     public GameObject _settings;
+
+    public void OnClickPlayOnline()
+    {
+        SceneManager.LoadScene("Lobby");
+    }
 
     public void LogIn_button()
     {
