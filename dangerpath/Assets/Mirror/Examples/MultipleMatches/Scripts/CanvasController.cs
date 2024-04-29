@@ -563,6 +563,7 @@ namespace Mirror.Examples.MultipleMatch
                     }
                 case ClientMatchOperation.Created:
                     {
+                        Debug.Log("ClientMatchOperation");
                         localPlayerMatch = msg.matchId;
                         ShowRoomView();
                         roomGUI.RefreshRoomPlayers(msg.playerInfos);
