@@ -21,6 +21,8 @@ public struct CreateRoomRequest : NetworkMessage
 {
     public string roomName;
     public int maxPlayers;
+    public int mapNumber;
+    public int numberOfLaps;
 }
 public struct LobbyListMessage : NetworkMessage
 {
@@ -37,3 +39,12 @@ public struct JoinRoomResponse : NetworkMessage
     public bool success;
     public string message;
 }
+
+public struct RoomUpdateMessage : NetworkMessage
+{
+    public string RoomName;
+    public int CurrentPlayers;
+    public int MaxPlayers;
+}
+
+public struct RequestLobbyListMessage : NetworkMessage { }

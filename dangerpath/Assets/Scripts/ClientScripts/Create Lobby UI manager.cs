@@ -12,13 +12,28 @@ public class CreateLobbyUImanager : MonoBehaviour
 
     public GameObject lobbuListCanvas;
 
-    private int numberOfPlayers = 1;
-    private int numberOfLaps = 1;
-    private int mapNumber = 0;
+    private static int numberOfPlayers = 3;
+    private static int numberOfLaps = 1;
+    private static int mapNumber = 0;
 
     void Start()
     {
         mapArray[mapNumber].gameObject.SetActive(true);
+    }
+
+    public static int GetNumberOfPlayersInLobby()
+    {
+        return numberOfPlayers;
+    }
+
+    public static int GetNumberOfLapsInLobby()
+    {
+        return numberOfLaps;
+    }
+
+    public static int GetMapNumberInLobby()
+    {
+        return mapNumber;
     }
 
     public void OnClickNextMapBTN()

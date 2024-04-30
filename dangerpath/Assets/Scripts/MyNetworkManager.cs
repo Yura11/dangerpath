@@ -2,6 +2,7 @@ using Mirror;
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using UnityEngine.SceneManagement;
 
 public class CustomNetworkManager : NetworkManager
 {
@@ -11,14 +12,28 @@ public class CustomNetworkManager : NetworkManager
     // Invoke this method to update all subscribers with the latest list of game rooms
     public void UpdateLobbies()
     {
+        gameRooms = FetchUpdatedRooms();  // Assume FetchUpdatedRooms returns the latest list
         OnLobbiesUpdated?.Invoke(gameRooms);
+        Debug.Log($"Updated lobbies: {gameRooms.Count} rooms now available.");
+    }
+
+    private List<GameRoom> FetchUpdatedRooms()
+    {
+        // For now, return the existing list of game rooms.
+        // You can add logic here to fetch or update this list from a database or other data source as needed.
+        return gameRooms;
     }
 
     public void RequestLobbyListUpdate()
     {
-        if (NetworkServer.active)  // Check if this instance is the server
+        if (NetworkClient.isConnected)
         {
+            Debug.Log("Client is connected. Sending request for lobby updates.");
             SendLobbyUpdateToClients();
+        }
+        else
+        {
+            Debug.Log("Client is not connected to the server.");
         }
     }
 
@@ -27,6 +42,7 @@ public class CustomNetworkManager : NetworkManager
         base.OnStartServer();
         NetworkServer.RegisterHandler<JoinRoomRequest>(OnJoinRoomRequestReceived);
         NetworkServer.RegisterHandler<CreateRoomRequest>(OnCreateRoomRequestReceived);
+        NetworkServer.RegisterHandler<RequestLobbyListMessage>(OnRequestLobbyListReceived);
     }
 
     private void OnCreateRoomRequestReceived(NetworkConnection conn, CreateRoomRequest request)
@@ -40,7 +56,8 @@ public class CustomNetworkManager : NetworkManager
         }
         else
         {
-            CreateRoom(request.roomName, request.maxPlayers);
+            // Use the provided details to create a new GameRoom
+            CreateRoom(request.roomName, request.maxPlayers, request.mapNumber, request.numberOfLaps, conn);
             response.Success = true;
             response.Message = "Room created successfully.";
         }
@@ -48,17 +65,39 @@ public class CustomNetworkManager : NetworkManager
         conn.Send(response);
     }
 
-    public void CreateRoom(string roomName, int maxPlayers)
+    public void CreateRoom(string roomName, int maxPlayers, int mapNumber, int numberOfLaps, NetworkConnection conn)
     {
-        GameRoom newRoom = new GameRoom(roomName, maxPlayers);
-        gameRooms.Add(newRoom);
-        // Further logic to initialize the room or inform players
+        if (!gameRooms.Exists(room => room.RoomName == roomName))
+        {
+            GameRoom newRoom = new GameRoom(roomName, maxPlayers, mapNumber, numberOfLaps);
+            gameRooms.Add(newRoom);
+            PlayerJoined(newRoom, conn); // Add the creator to the room immediately
+
+            // Notify the creator that the room was created and they have joined it
+            JoinRoomResponse joinResponse = new JoinRoomResponse
+            {
+                success = true,
+                message = "Room created and joined successfully."
+            };
+            conn.Send(joinResponse);
+        }
+        else
+        {
+            // Room already exists, send an error message
+            CreateRoomResponse response = new CreateRoomResponse
+            {
+                Success = false,
+                Message = "Room already exists."
+            };
+            conn.Send(response);
+        }
     }
 
     private void SendLobbyUpdateToClients()
     {
-        // You can optimize by sending only to clients that need it or broadcasting to all
-        UIManager.Instance.UpdateLobbyList(gameRooms);
+        LobbyListMessage message = new LobbyListMessage { Lobbies = gameRooms };
+        Debug.Log($"Sending lobby update to all clients with {message.Lobbies.Count} entries.");
+        NetworkServer.SendToAll(message);
     }
 
     public override void OnStartClient()
@@ -66,6 +105,15 @@ public class CustomNetworkManager : NetworkManager
         base.OnStartClient();
         NetworkClient.RegisterHandler<CreateRoomResponse>(OnCreateRoomResponseReceived);
         NetworkClient.RegisterHandler<JoinRoomResponse>(OnJoinRoomResponseReceived);
+        NetworkClient.RegisterHandler<LobbyListMessage>(OnLobbyListReceived);
+    }
+
+    private void OnRequestLobbyListReceived(NetworkConnection conn, RequestLobbyListMessage message)
+    {
+        UpdateLobbies();
+        LobbyListMessage response = new LobbyListMessage { Lobbies = gameRooms };
+        conn.Send(response);
+        Debug.Log("Sent lobby list update to client.");
     }
 
     private void OnCreateRoomResponseReceived(CreateRoomResponse response)
@@ -77,7 +125,9 @@ public class CustomNetworkManager : NetworkManager
     {
         if (response.success)
         {
-            Debug.Log("Successfully joined the room.");
+            Debug.Log("Successfully created and joined the room.");
+            // Optionally switch to the lobby scene or update UI
+            SceneManager.LoadScene("LobbyScene");
         }
         else
         {
@@ -107,6 +157,16 @@ public class CustomNetworkManager : NetworkManager
         }
     }
 
+    public void PlayerJoined(GameRoom room, NetworkConnection player)
+    {
+        if (!room.IsFull())
+        {
+            room.Players.Add(player);
+            room.CurrentPlayers = room.Players.Count; // Update player count
+            UpdateLobbies();  // Notify UI to refresh
+        }
+    }
+
     // Handler for join requests
     private void OnJoinRoomRequestReceived(NetworkConnection conn, JoinRoomRequest request)
     {
@@ -114,9 +174,21 @@ public class CustomNetworkManager : NetworkManager
         Debug.Log("Join Room Request received");
     }
 
-    public void BroadcastLobbyUpdate()
+    private void OnLobbyListReceived(LobbyListMessage message)
     {
-        var lobbyListMessage = new LobbyListMessage { Lobbies = gameRooms };
-        NetworkServer.SendToAll(lobbyListMessage);
+        Debug.Log($"Received lobby list with {message.Lobbies.Count} lobbies.");
+        UIManager.Instance.UpdateLobbyList(message.Lobbies);
+    }
+
+    public void SendRoomUpdate(GameRoom room)
+    {
+        RoomUpdateMessage updateMessage = new RoomUpdateMessage()
+        {
+            RoomName = room.RoomName,
+            MaxPlayers = room.MaxPlayers,
+            CurrentPlayers = room.CurrentPlayers
+        };
+
+        NetworkServer.SendToAll(updateMessage);
     }
 }

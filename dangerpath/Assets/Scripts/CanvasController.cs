@@ -7,6 +7,8 @@ public class UIManager : MonoBehaviour
 {
     public CustomNetworkManager networkManager;
     public GameObject lobbyListItemPrefab;
+    public GameObject createLobbyMenu;
+    public GameObject lobby;
     public Transform lobbyListParent;
     public static UIManager Instance { get; private set; }
 
@@ -33,19 +35,18 @@ public class UIManager : MonoBehaviour
         CustomNetworkManager.OnLobbiesUpdated -= UpdateLobbyList;
     }
 
+
     public void UpdateLobbyList(List<GameRoom> lobbies)
     {
-        // Clear existing list
         foreach (Transform child in lobbyListParent)
         {
             Destroy(child.gameObject);
         }
 
-        // Populate new list items
         foreach (var lobby in lobbies)
         {
             GameObject item = Instantiate(lobbyListItemPrefab, lobbyListParent);
-            item.GetComponent<LobbyListItem>().Setup(lobby.RoomName, lobby.MaxPlayers, () => RequestJoinRoom(lobby.RoomName));
+            item.GetComponent<LobbyListItem>().Setup(lobby.RoomName, lobby.MaxPlayers, lobby.CurrentPlayers, () => RequestJoinRoom(lobby.RoomName));
         }
     }
 
@@ -61,19 +62,29 @@ public class UIManager : MonoBehaviour
         CreateRoomRequest request = new CreateRoomRequest
         {
             roomName = "test",
-            maxPlayers = 8
+            mapNumber = CreateLobbyUImanager.GetMapNumberInLobby(),
+            maxPlayers = CreateLobbyUImanager.GetNumberOfPlayersInLobby(),
+            numberOfLaps = CreateLobbyUImanager.GetNumberOfLapsInLobby(),
         };
-
         NetworkClient.Send(request);
     }
 
     public void OnRefreshLobbiesButtonClicked()
     {
-        networkManager.RequestLobbyListUpdate();
+        if (NetworkClient.isConnected)
+        {
+            NetworkClient.Send(new RequestLobbyListMessage());
+            Debug.Log("Request for lobby list update sent.");
+        }
+        else
+        {
+            Debug.Log("Client is not connected to the server.");
+        }
     }
 
     private void OnLobbyListReceived(LobbyListMessage message)
     {
+        Debug.Log($"Received lobby list with {message.Lobbies.Count} lobbies.");
         UpdateLobbyList(message.Lobbies);
     }
 }

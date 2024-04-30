@@ -78,6 +78,7 @@ dangerpath/Assets/Scripts/Editor/Generated/
 
 # ParrelSync
 dangerpath_clone_0/*
+dangerpath_clone_1/*
 
 # Some Json data
 WebServer/package.json

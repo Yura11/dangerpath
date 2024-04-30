@@ -189,7 +189,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomNameText: {fileID: 827507358107711709}
-  maxPlayersText: {fileID: 5512118341262900942}
+  playersInLobbyText: {fileID: 5512118341262900942}
+  mapName: {fileID: 1290682921606155482}
   joinButton: {fileID: 7935090578653061777}
 --- !u!114 &365506433161330485
 MonoBehaviour:
