@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System;
 
 public class MessageRequests : NetworkMessage
 {
@@ -23,6 +24,7 @@ public struct CreateRoomRequest : NetworkMessage
     public int maxPlayers;
     public int mapNumber;
     public int numberOfLaps;
+    public string nickName;
 }
 public struct LobbyListMessage : NetworkMessage
 {
@@ -42,9 +44,13 @@ public struct JoinRoomResponse : NetworkMessage
 
 public struct RoomUpdateMessage : NetworkMessage
 {
+    public Guid RoomId;
     public string RoomName;
-    public int CurrentPlayers;
     public int MaxPlayers;
+    public int CurrentPlayers;
+    public int MapNumber;
+    public int NumberOfLaps;
 }
+
 
 public struct RequestLobbyListMessage : NetworkMessage { }

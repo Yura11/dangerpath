@@ -1,5 +1,6 @@
 using Mirror;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class GameRoomManager
 {
@@ -18,13 +19,30 @@ public class GameRoomManager
         networkManager.SendRoomUpdate(room);
     }
 
-    public void PlayerJoined(GameRoom room, NetworkConnection conn)
+    public void PlayerJoined(GameRoom room, NetworkConnection conn, string nickname)
     {
+        NetworkConnectionToClient clientConn = conn as NetworkConnectionToClient;
+        if (clientConn == null)
+        {
+            Debug.LogError("Connection is not a client connection.");
+            return;
+        }
+
         if (!room.IsFull())
         {
-            room.Players.Add(conn);
-            room.CurrentPlayers = room.Players.Count;
-            NotifyClientsOfUpdatedRoom(room);
+            if (!room.PlayerNicknames.Contains(nickname))
+            {
+                room.PlayerNicknames.Add(nickname);
+                room.CurrentPlayers = room.PlayerNicknames.Count;
+                NotifyClientsOfUpdatedRoom(room);
+            }
+            else
+            {
+                Debug.LogError("Nickname already exists in the room.");
+                // Optionally handle the situation, e.g., request a different nickname
+            }
         }
     }
+
+
 }

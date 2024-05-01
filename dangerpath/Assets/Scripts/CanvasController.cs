@@ -25,6 +25,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        CustomNetworkManager.OnLobbiesUpdated += UpdateLobbyList;
+    }
+
     private void OnEnable()
     {
         CustomNetworkManager.OnLobbiesUpdated += UpdateLobbyList;
@@ -49,6 +54,7 @@ public class UIManager : MonoBehaviour
             item.GetComponent<LobbyListItem>().Setup(lobby.RoomName, lobby.MaxPlayers, lobby.CurrentPlayers, () => RequestJoinRoom(lobby.RoomName));
         }
     }
+
 
     public void RequestJoinRoom(string roomName)
     {

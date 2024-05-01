@@ -1,32 +1,21 @@
 using Mirror;
 using System.Collections.Generic;
+using System;
 
-public class GameRoom
+[System.Serializable]
+public struct GameRoom
 {
-    public string RoomName { get; private set; }
-    public int MaxPlayers { get; private set; }
-    public int CurrentPlayers { get; set; }
-    public List<NetworkConnection> Players { get; private set; }
-    public int MapNumber { get; private set; }
-    public int NumberOfLaps { get; private set; }
+    public List<string> PlayerNicknames;
+    public Guid RoomId;
+    public string RoomName;
+    public int MaxPlayers;
+    public int CurrentPlayers;
+    public int MapNumber;
+    public int NumberOfLaps;
 
-    // Default constructor
-    public GameRoom()
+    // Method to check if the room is full
+    public bool IsFull()
     {
-        RoomName = "Default constructor Room";
-        MaxPlayers = 4;
-        Players = new List<NetworkConnection>();
+        return CurrentPlayers >= MaxPlayers;
     }
-
-    // Additional constructor for initialization
-    public GameRoom(string name, int maxPlayers, int mapNumber, int numberOfLaps)
-    {
-        RoomName = name;
-        MaxPlayers = maxPlayers;
-        Players = new List<NetworkConnection>();
-        MapNumber = mapNumber;
-        NumberOfLaps = numberOfLaps;
-    }
-
-    public bool IsFull() => Players.Count >= MaxPlayers;
 }
