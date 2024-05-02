@@ -34,6 +34,7 @@ public struct LobbyListMessage : NetworkMessage
 public struct JoinRoomRequest : NetworkMessage
 {
     public string roomName;
+    public string playerName;
 }
 
 public struct JoinRoomResponse : NetworkMessage
@@ -54,3 +55,18 @@ public struct RoomUpdateMessage : NetworkMessage
 
 
 public struct RequestLobbyListMessage : NetworkMessage { }
+
+public struct LeaveRoomRequest : NetworkMessage
+{
+    public string roomName; // Existing
+    public string playerName; // Add this if it's missing
+}
+
+public struct LeaveRoomResponse : NetworkMessage
+{
+    public bool success;
+    public string message;
+    public string playerName;  // Add this line to include the player's nickname in the response
+}
+
+public struct BroadcastLobbyLeaft : NetworkMessage { }

@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     public GameObject lobbyListItemPrefab;
     public GameObject createLobbyMenu;
     public GameObject lobby;
+    public GameObject lobbyList;
     public Transform lobbyListParent;
     public static UIManager Instance { get; private set; }
 
@@ -51,7 +52,7 @@ public class UIManager : MonoBehaviour
         foreach (var lobby in lobbies)
         {
             GameObject item = Instantiate(lobbyListItemPrefab, lobbyListParent);
-            item.GetComponent<LobbyListItem>().Setup(lobby.RoomName, lobby.MaxPlayers, lobby.CurrentPlayers, () => RequestJoinRoom(lobby.RoomName));
+            item.GetComponent<LobbyListItem>().Setup(lobby.RoomName, lobby.MaxPlayers, lobby.Players.Count, () => RequestJoinRoom(lobby.RoomName));
         }
     }
 
@@ -62,6 +63,25 @@ public class UIManager : MonoBehaviour
         NetworkClient.Send(request);
     }
 
+    public void UpdateUIOnRoomJoin()
+    {
+        if (lobbyList != null && lobbyList.activeSelf)
+            lobbyList.SetActive(false);
+        if (createLobbyMenu != null && createLobbyMenu.activeSelf)
+            createLobbyMenu.SetActive(false);
+        if (lobby != null && !lobby.activeSelf)
+            lobby.SetActive(true);
+    }
+
+    public void UpdateUIOnRoomLeave()
+    {
+        if (!lobbyList.activeSelf)
+            lobbyList.SetActive(true);
+        if (!createLobbyMenu.activeSelf)
+            createLobbyMenu.SetActive(false);
+        if (lobby.activeSelf)
+            lobby.SetActive(false);
+    }
 
     public void OnCreateRoomButtonClicked()
     {
@@ -71,8 +91,25 @@ public class UIManager : MonoBehaviour
             mapNumber = CreateLobbyUImanager.GetMapNumberInLobby(),
             maxPlayers = CreateLobbyUImanager.GetNumberOfPlayersInLobby(),
             numberOfLaps = CreateLobbyUImanager.GetNumberOfLapsInLobby(),
+            nickName = networkManager.GenerateRandomName(6),
         };
         NetworkClient.Send(request);
+    }
+
+    public void OnLeaveRoomButtonClicked()
+    {
+        if (!NetworkClient.isConnected)
+        {
+            Debug.Log("Client is not connected to the server.");
+            return;
+        }
+
+        LeaveRoomRequest request = new LeaveRoomRequest
+        {
+            roomName = "test" // You need to dynamically set this based on the room the player is currently in
+        };
+        NetworkClient.Send(request);
+        Debug.Log("LeaveRoomRequest send.");
     }
 
     public void OnRefreshLobbiesButtonClicked()

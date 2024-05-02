@@ -1,48 +1,55 @@
 using Mirror;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class GameRoomManager
+public class GameRoomManager : MonoBehaviour
 {
+    private CustomNetworkManager networkManager;
     private List<GameRoom> gameRooms;
-    private CustomNetworkManager networkManager; // Assuming this is how you access your network manager
 
-    public GameRoomManager(List<GameRoom> gameRooms, NetworkManager networkManager)
+    public GameRoomManager(List<GameRoom> gameRooms, CustomNetworkManager networkManager)
     {
         this.gameRooms = gameRooms;
-        this.networkManager = (CustomNetworkManager)networkManager;
+        this.networkManager = networkManager;
     }
 
-    public void NotifyClientsOfUpdatedRoom(GameRoom room)
+    public void AddPlayerToRoom(GameRoom room, NetworkConnection conn, string nickname, bool isOwner)
     {
-        // Example: Assuming you have a method in NetworkManager to send updates
-        networkManager.SendRoomUpdate(room);
-    }
-
-    public void PlayerJoined(GameRoom room, NetworkConnection conn, string nickname)
-    {
+        // Attempt to cast to NetworkConnectionToClient
         NetworkConnectionToClient clientConn = conn as NetworkConnectionToClient;
         if (clientConn == null)
         {
-            Debug.LogError("Connection is not a client connection.");
+            Debug.LogError("Failed to cast NetworkConnection to NetworkConnectionToClient.");
             return;
         }
 
-        if (!room.IsFull())
+        if (room.IsFull())
         {
-            if (!room.PlayerNicknames.Contains(nickname))
-            {
-                room.PlayerNicknames.Add(nickname);
-                room.CurrentPlayers = room.PlayerNicknames.Count;
-                NotifyClientsOfUpdatedRoom(room);
-            }
-            else
-            {
-                Debug.LogError("Nickname already exists in the room.");
-                // Optionally handle the situation, e.g., request a different nickname
-            }
+            Debug.LogError("Room is full.");
+            return;
+        }
+
+        int connectionId = clientConn.connectionId;
+        if (room.Players.Any(p => p.connectionId == connectionId.ToString()))
+        {
+            Debug.LogError("Player with this connection ID already exists in the room.");
+            return;
+        }
+
+        // Assume playerPrefab is a configured GameObject in your scene or assets with a NetworkPlayer component
+        GameObject playerObject = Instantiate(networkManager.playerPrefab);
+        NetworkPlayer player = playerObject.GetComponent<NetworkPlayer>();
+        if (player != null)
+        {
+            player.SetPlayer(nickname, isOwner, connectionId.ToString());
+            NetworkServer.AddPlayerForConnection(clientConn, playerObject);
+            room.Players.Add(player);
+        }
+        else
+        {
+            Debug.LogError("NetworkPlayer component not found on the prefab!");
+            Destroy(playerObject); // Clean up to avoid ghost GameObjects
         }
     }
-
-
 }
