@@ -7,15 +7,18 @@ public class NetworkPlayer : NetworkBehaviour
     [SyncVar]
     public string playerName;
     [SyncVar]
-    public bool isOwner = false;
+    public bool isOwner;
     [SyncVar]
     public string connectionId;
+    [SyncVar]
+    public bool playerReadyStatus;
 
     public void SetPlayer(string name, bool ownerStatus, string connId)
     {
-        playerName = name;
-        isOwner = ownerStatus;
-        connectionId = connId;  // Set the connection ID
+            playerName = name;
+            isOwner = ownerStatus;
+            connectionId = connId;  // Set the connection ID
+            playerReadyStatus = isOwner;
     }
 
     public override void OnStartClient()

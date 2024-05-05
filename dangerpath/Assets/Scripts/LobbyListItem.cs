@@ -6,18 +6,27 @@ public class LobbyListItem : MonoBehaviour
     public Text roomNameText;
     public Text playersInLobbyText;
     public Text mapName;
+    public Text gameStateText;
     public Button joinButton;
 
     private float lastClickTime = 0f;
     private const float doubleClickTime = 0.3f; // Time in seconds
     private int clickCount = 0;
 
-    public void Setup(string roomName, int maxPlayers, int currentPlayers, System.Action onJoinClicked)
+    public void SetupLobbyListItem(string roomName, int maxPlayers, int currentPlayers, int mapNumber, bool gameState, System.Action onJoinClicked)
     {
         mapName.text = ""; // assuming you'll set this elsewhere or it's static
         roomNameText.text = roomName;
         playersInLobbyText.text = $"{currentPlayers}/{maxPlayers}"; // Updated to show current players
-
+        gameStateText.text = gameState ? "In Game" : "In Lobby";
+        if (mapNumber == 0)
+        {
+            mapName.text = "Pechersk";
+        }
+        else
+        {
+            mapName.text = "Not Pechersk";
+        }
         joinButton.onClick.AddListener(() => HandleClick(onJoinClicked));
     }
 

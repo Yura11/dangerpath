@@ -191,6 +191,7 @@ MonoBehaviour:
   roomNameText: {fileID: 827507358107711709}
   playersInLobbyText: {fileID: 5512118341262900942}
   mapName: {fileID: 1290682921606155482}
+  gameStateText: {fileID: 7410124408674462961}
   joinButton: {fileID: 7935090578653061777}
 --- !u!114 &365506433161330485
 MonoBehaviour:

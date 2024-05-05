@@ -70,3 +70,27 @@ public struct LeaveRoomResponse : NetworkMessage
 }
 
 public struct BroadcastLobbyLeaft : NetworkMessage { }
+
+public struct PlayerListUpdateMessage : NetworkMessage
+{
+    public List<PlayerData> Players;
+
+    public struct PlayerData
+    {
+        public string PlayerName;
+        public bool ReadyStatus;
+        public bool OwnerStatus;
+    }
+}
+
+public struct PlayerStatusRequest : NetworkMessage { }
+
+public struct PlayerStatusMessage : NetworkMessage
+{
+    public bool OwnerStatus;
+}
+
+public struct SetPlayerReadyStatusRequest : NetworkMessage
+{
+    public bool PlayerReadyStatus;
+}

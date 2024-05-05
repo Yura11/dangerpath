@@ -1,4 +1,5 @@
 using Mirror;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -52,4 +53,36 @@ public class GameRoomManager : MonoBehaviour
             Destroy(playerObject); // Clean up to avoid ghost GameObjects
         }
     }
+
+    public void NotifyRoomClientsOfUpdatedPlayerList(Guid roomId)
+    {
+        Debug.Log("NotifyRoomClientsOfUpdatedPlayerList");
+
+        // Check if such a match exists in the connection dictionary
+        if (CustomNetworkManager.matchConnections.TryGetValue(roomId, out var connections))
+        {
+            var room = CustomNetworkManager.openMatches[roomId];
+
+            // Convert the NetworkPlayer list to a PlayerData list
+            var players = room.Players.Select(p => new PlayerListUpdateMessage.PlayerData
+            {
+                PlayerName = p.playerName,
+                ReadyStatus = p.playerReadyStatus,
+                OwnerStatus = p.isOwner,
+            }).ToList();
+
+            // Prepare a message with an updated list of players
+            var message = new PlayerListUpdateMessage { Players = players };
+
+            // Send messages only to players listed in this GameRoom
+            foreach (var player in room.Players)
+            {
+                if (NetworkServer.connections.TryGetValue(int.Parse(player.connectionId), out var conn))
+                {
+                    conn.Send(message);
+                }
+            }
+        }
+    }
+
 }

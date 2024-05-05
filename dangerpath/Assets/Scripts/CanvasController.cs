@@ -10,7 +10,12 @@ public class UIManager : MonoBehaviour
     public GameObject createLobbyMenu;
     public GameObject lobby;
     public GameObject lobbyList;
+    public GameObject playersListItemPrefab;
+    public GameObject readyBTN;
+    public GameObject notReadyBTN;
+    public GameObject startGameBTN;
     public Transform lobbyListParent;
+    public Transform playersListParent;
     public static UIManager Instance { get; private set; }
 
     void Awake()
@@ -52,15 +57,40 @@ public class UIManager : MonoBehaviour
         foreach (var lobby in lobbies)
         {
             GameObject item = Instantiate(lobbyListItemPrefab, lobbyListParent);
-            item.GetComponent<LobbyListItem>().Setup(lobby.RoomName, lobby.MaxPlayers, lobby.Players.Count, () => RequestJoinRoom(lobby.RoomName));
+            item.GetComponent<LobbyListItem>().SetupLobbyListItem(lobby.RoomName, lobby.MaxPlayers, lobby.Players.Count, lobby.MapNumber, lobby.GameState, () => RequestJoinRoom(lobby.RoomName));
         }
     }
 
+    public void UpdatePlayersList(List<NetworkPlayer> lobbyPlayers)
+    {
+        foreach (Transform cild in playersListParent)
+        {
+            Destroy(cild.gameObject);
+        }
+        foreach (var player in lobbyPlayers)
+        {
+            GameObject item = Instantiate(playersListItemPrefab, playersListParent);
+            item.GetComponent<PlayersListItem>().SetupPlayersListItem(player.playerName, player.playerReadyStatus, player.isOwner);
+        }
+    }
 
     public void RequestJoinRoom(string roomName)
     {
-        JoinRoomRequest request = new JoinRoomRequest { roomName = roomName };
+        JoinRoomRequest request = new JoinRoomRequest { roomName = roomName, playerName= networkManager.GenerateRandomName(6) };
         NetworkClient.Send(request);
+    }
+
+    public void RequestPlayerStatus()
+    {
+        PlayerStatusRequest request = new PlayerStatusRequest { };
+        NetworkClient.Send(request);
+    }
+
+    public void SetNotReadyAndStartBTNs(bool isOwner)
+    {
+        readyBTN.SetActive(!isOwner);
+        notReadyBTN.SetActive(false);
+        startGameBTN.SetActive(isOwner);
     }
 
     public void UpdateUIOnRoomJoin()
@@ -71,6 +101,7 @@ public class UIManager : MonoBehaviour
             createLobbyMenu.SetActive(false);
         if (lobby != null && !lobby.activeSelf)
             lobby.SetActive(true);
+        RequestPlayerStatus();
     }
 
     public void UpdateUIOnRoomLeave()
@@ -123,6 +154,30 @@ public class UIManager : MonoBehaviour
         {
             Debug.Log("Client is not connected to the server.");
         }
+    }
+
+    public void OnReadyBTNClicked()
+    {
+        SetPlayerReadyStatusRequest request = new SetPlayerReadyStatusRequest
+        {
+            PlayerReadyStatus = true,
+        };
+        NetworkClient.Send(request);
+        readyBTN.SetActive(false);
+        notReadyBTN.SetActive(true);
+        startGameBTN.SetActive(false);
+    }
+
+    public void OnNotReadyBTNClicked()
+    {
+        SetPlayerReadyStatusRequest request = new SetPlayerReadyStatusRequest
+        {
+            PlayerReadyStatus = false,
+        };
+        NetworkClient.Send(request);
+        readyBTN.SetActive(true);
+        notReadyBTN.SetActive(false);
+        startGameBTN.SetActive(false);
     }
 
     private void OnLobbyListReceived(LobbyListMessage message)

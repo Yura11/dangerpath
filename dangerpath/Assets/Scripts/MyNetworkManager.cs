@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using Photon.Realtime;
 
 public class CustomNetworkManager : NetworkManager
 {
@@ -40,6 +41,7 @@ public class CustomNetworkManager : NetworkManager
         matchConnections[newRoomId].Add(clientConn);
 
         gameRoomManager.AddPlayerToRoom(newRoom, clientConn,  nickname, true);
+        gameRoomManager.NotifyRoomClientsOfUpdatedPlayerList(newRoomId);
     }
 
     public void SendRoomUpdate(GameRoom room)
@@ -120,6 +122,8 @@ public class CustomNetworkManager : NetworkManager
         NetworkServer.RegisterHandler<RequestLobbyListMessage>(OnRequestLobbyListReceived);
         NetworkServer.RegisterHandler<CreateRoomRequest>(OnCreateRoomRequestReceived);
         NetworkServer.RegisterHandler<JoinRoomRequest>(OnJoinRoomRequestReceived);
+        NetworkServer.RegisterHandler<PlayerStatusRequest>(OnPlayerStatusRequestReceived);
+        NetworkServer.RegisterHandler<SetPlayerReadyStatusRequest>(OnSetPlayerReadyStatusRequestReceived);
     }
 
     private void OnRequestLobbyListReceived(NetworkConnection conn, RequestLobbyListMessage message)
@@ -142,33 +146,29 @@ public class CustomNetworkManager : NetworkManager
 
     private void OnJoinRoomRequestReceived(NetworkConnection conn, JoinRoomRequest request)
     {
-        // Ensure the connection is of the correct type.
         if (!(conn is NetworkConnectionToClient clientConn))
         {
             Debug.LogError("JoinRoomRequest received from a non-client connection.");
             return;
         }
 
-        // Find the room by room name.
         var room = openMatches.Values.FirstOrDefault(r => r.RoomName == request.roomName);
         if (!room.Equals(default(GameRoom)) && room.Players.Count < room.MaxPlayers)
         {
-            // Call AddPlayerToRoom method from GameRoomManager with the correct parameters.
-            gameRoomManager.AddPlayerToRoom(room, clientConn, request.playerName, false); // False because this player is not the owner.
+            gameRoomManager.AddPlayerToRoom(room, clientConn, request.playerName, false);
 
-            // Prepare and send the successful response.
+            // Update player list for this lobby only
+            gameRoomManager.NotifyRoomClientsOfUpdatedPlayerList(room.RoomId);
+
             conn.Send(new JoinRoomResponse { success = true, message = "Successfully joined the room." });
-
-            // Update the lobby list since the room's state has changed.
             UpdateLobbies();
+            gameRoomManager.NotifyRoomClientsOfUpdatedPlayerList(room.RoomId);
         }
         else
         {
-            // Send a response indicating failure to join the room.
             conn.Send(new JoinRoomResponse { success = false, message = "Failed to join room: Room is full or does not exist." });
         }
     }
-
 
     private void OnLeaveRoomRequestReceived(NetworkConnection conn, LeaveRoomRequest request)
     {
@@ -180,30 +180,27 @@ public class CustomNetworkManager : NetworkManager
         }
 
         var room = openMatches.Values.FirstOrDefault(r => r.RoomName == request.roomName);
-        LogPlayerNicknames(room);
-        if (room.Equals(default(GameRoom))) // Ensure room exists
+        if (room.Equals(default(GameRoom)))
         {
             Debug.LogError("Room not found.");
             return;
         }
 
-        // Find the player with the matching connection ID to remove.
         var playerToRemove = room.Players.FirstOrDefault(p => p.connectionId == clientConn.connectionId.ToString());
         if (playerToRemove != null)
         {
-            room.Players.Remove(playerToRemove); // Remove the player object from the list.
+            room.Players.Remove(playerToRemove);
+            openMatches[room.RoomId] = room;
 
-            openMatches[room.RoomId] = room; // Update the room in the dictionary if needed.
-            UpdateLobbies();
+            // Update player list for this lobby only
+            gameRoomManager.NotifyRoomClientsOfUpdatedPlayerList(room.RoomId);
 
-            // Send a response including the player's nickname
             conn.Send(new LeaveRoomResponse
             {
                 success = true,
                 message = $"Successfully left the room. Player: {playerToRemove.playerName}",
-                playerName = playerToRemove.playerName // Optionally send the name as a separate field
+                playerName = playerToRemove.playerName
             });
-            Debug.Log("Successfully processed leave room request and updated lobby.");
             if (playerToRemove.isOwner)
             {
                 openMatches.Remove(room.RoomId);
@@ -212,16 +209,84 @@ public class CustomNetworkManager : NetworkManager
                 };
                 NetworkServer.SendToAll(updateMessage);
             }
+            UpdateLobbies();
         }
         else
         {
-            LogPlayerNicknames(room);
             conn.Send(new LeaveRoomResponse
             {
                 success = false,
                 message = "Player not found in the room based on connection ID."
             });
             Debug.LogError("Failed to find player in room based on connection ID.");
+        }
+    }
+
+    private void OnPlayerStatusRequestReceived(NetworkConnection conn, PlayerStatusRequest request)
+    {
+        // We check whether `conn` is an object of type NetworkConnectionToClient.
+        if (conn is NetworkConnectionToClient clientConn)
+        {
+            // We go through all active matches to find a player by his connectionId.
+            foreach (var room in CustomNetworkManager.openMatches.Values)
+            {
+                var player = room.Players.FirstOrDefault(p => p.connectionId == clientConn.connectionId.ToString());
+
+                // If the player is found, we send the status.
+                if (player != null)
+                {
+                    PlayerStatusMessage message = new PlayerStatusMessage()
+                    {
+                        OwnerStatus = player.isOwner,
+                    };
+                    conn.Send(message);
+                    return;
+                }
+            }
+
+            // If no player with matching connectionId is found.
+            Debug.LogError($"Player not found with connection ID: {clientConn.connectionId}");
+        }
+        else
+        {
+            Debug.LogError("Received player status request from a non-client connection.");
+        }
+    }
+
+    private void OnSetPlayerReadyStatusRequestReceived(NetworkConnection conn, SetPlayerReadyStatusRequest request)
+    {
+        Debug.Log("SetPlayerReadyStatusRequestReceived");
+        // We check whether `conn` is an object of type NetworkConnectionToClient.
+        if (conn is NetworkConnectionToClient clientConn)
+        {
+            // Знаходимо кімнату, де знаходиться гравець за `connectionId`.
+            foreach (var kvp in CustomNetworkManager.openMatches)
+            {
+                var room = kvp.Value;
+
+                // We are looking for a player by `connectionId` among all players in the room.
+                var player = room.Players.FirstOrDefault(p => p.connectionId == clientConn.connectionId.ToString());
+
+                // If the player is found, we update the readiness status.
+                if (player != null)
+                {
+                    player.playerReadyStatus = request.PlayerReadyStatus;
+
+                    // We update the state of the room in the dictionary so that the changes are saved.
+                    CustomNetworkManager.openMatches[room.RoomId] = room;
+
+                    // We notify all customers in the room about the update of the player list.
+                    gameRoomManager.NotifyRoomClientsOfUpdatedPlayerList(room.RoomId);
+                    return;
+                }
+            }
+
+            // If no player with matching `connectionId` is found.
+            Debug.LogError($"Player not found with connection ID: {clientConn.connectionId}");
+        }
+        else
+        {
+            Debug.LogError("Received set player ready status request from a non-client connection.");
         }
     }
 
@@ -236,6 +301,8 @@ public class CustomNetworkManager : NetworkManager
         NetworkClient.RegisterHandler<CreateRoomResponse>(OnCreateRoomResponseReceived);
         NetworkClient.RegisterHandler<JoinRoomResponse>(OnJoinRoomResponseReceived);
         NetworkClient.RegisterHandler<BroadcastLobbyLeaft>(OnBroadcastLobbyLeaftReceived);
+        NetworkClient.RegisterHandler<PlayerListUpdateMessage>(OnPlayerListUpdateReceived);
+        NetworkClient.RegisterHandler<PlayerStatusMessage>(OnPlayerStatusMessageReceived);
     }
 
     private void OnLobbyListReceived(LobbyListMessage message)
@@ -285,5 +352,30 @@ public class CustomNetworkManager : NetworkManager
         UIManager.Instance.UpdateUIOnRoomLeave();
         UpdateLobbies();
     }
+
+    public void OnPlayerListUpdateReceived(PlayerListUpdateMessage message)
+    {
+        Debug.Log("PlayerListUpdateReceived");
+        var playerDataList = message.Players.Select(pd => new NetworkPlayer
+        {
+            playerName = pd.PlayerName,
+            playerReadyStatus = pd.ReadyStatus,
+            isOwner = pd.OwnerStatus,
+        }).ToList();
+
+        // Update player list display in UI
+        UIManager.Instance.UpdatePlayersList(playerDataList);
+    }
+
+    private void OnPlayerStatusMessageReceived(PlayerStatusMessage message)
+    {
+        UIManager.Instance.SetNotReadyAndStartBTNs(message.OwnerStatus);
+    }
+
+    void Start()
+    {
+        NetworkClient.RegisterHandler<PlayerListUpdateMessage>(OnPlayerListUpdateReceived);
+    }
+
     #endregion
 }

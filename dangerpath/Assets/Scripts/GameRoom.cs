@@ -11,6 +11,7 @@ public struct GameRoom
     public int MaxPlayers;
     public int MapNumber;
     public int NumberOfLaps;
+    public bool GameState;
 
     // Method to check if the room is full
     public bool IsFull()
