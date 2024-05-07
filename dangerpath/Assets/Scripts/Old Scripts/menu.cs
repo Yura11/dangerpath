@@ -10,7 +10,7 @@ public class menu : MonoBehaviour
 
     private void Start()
     {
-         PhotonNetwork.Disconnect();
+       //  PhotonNetwork.Disconnect();
     }
 
     public void Play()

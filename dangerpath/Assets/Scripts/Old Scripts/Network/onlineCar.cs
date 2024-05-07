@@ -13,22 +13,22 @@ public class onlinecarmove : MonoBehaviour
     [SerializeField] private AudioSource Soundaffect2;
 
     private bool isButtonPressed;
-    private PhotonView View;
+   // private PhotonView View;
 
     private void Start()
     {
         if (Soundaffect1) Soundaffect1.Play();
         isButtonPressed = false;
-        View = GetComponent<PhotonView>();
+       // View = GetComponent<PhotonView>();
     }
 
     private void Update()
     {
-        if (View && View.IsMine)
+       /* if (View && View.IsMine)
         {
             HandleMovement();
             HandleSoundEffects();
-        }
+        }*/
     }
 
     private void HandleMovement()

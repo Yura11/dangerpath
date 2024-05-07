@@ -1,11 +1,10 @@
 ﻿using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LeaderboardUIHandler : MonoBehaviourPunCallbacks
+public class LeaderboardUIHandler : MonoBehaviour
 {
     public GameObject leaderboardItemPrefab;
 
@@ -13,7 +12,7 @@ public class LeaderboardUIHandler : MonoBehaviourPunCallbacks
     SetLeaderBoardItemInfo[] setLeaderboardItemInfo;
     public string[] WinnersList;
 
-    void Awake()
+   /* void Awake()
     {
         onlinePositionHandler = FindObjectOfType<OnlinePositionHandler>();
         setLeaderboardItemInfo = new SetLeaderBoardItemInfo[PhotonNetwork.PlayerList.Length];
@@ -26,7 +25,7 @@ public class LeaderboardUIHandler : MonoBehaviourPunCallbacks
        /* if (Input.GetKeyDown(KeyCode.Space))
         {
             CreateLeaderBoardItems();
-        }*/
+        }
     }
 
     public void CreateLeaderBoardItems()
@@ -81,5 +80,5 @@ public class LeaderboardUIHandler : MonoBehaviourPunCallbacks
     public string GetWinners(int i)
     {
         return WinnersList[i];
-    }
+    }*/
 }

@@ -1,13 +1,12 @@
-using Photon.Pun;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Photon.Realtime;
 using System;
 
-public class ExitCanvasHandler : MonoBehaviourPunCallbacks
+public class ExitCanvasHandler : MonoBehaviour
 {
     public GameObject exitCanvas;
     // Start is called before the first frame update
@@ -32,18 +31,18 @@ public class ExitCanvasHandler : MonoBehaviourPunCallbacks
 
     public void Menubutton()
     {
-        if (PhotonNetwork.IsConnected)
-        {
+       // if (PhotonNetwork.IsConnected)
+       // {
             // PhotonNetwork.Disconnect();
-            PhotonNetwork.LeaveLobby();
+           // PhotonNetwork.LeaveLobby();
             SceneManager.LoadScene("SampleScene");
-        }
-        else
+       // }
+        //else
         {
             Debug.LogError("Photon client is not connected.");
             SceneManager.LoadScene("SampleScene");
         }
        
-    }
+   }
 
 }

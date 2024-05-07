@@ -40,9 +40,9 @@ public class GameOverHandler : MonoBehaviour
         leaderboardUIHandler = FindObjectOfType<LeaderboardUIHandler>();
         GameOverCanvas.gameObject.SetActive(true);
         BestTimes();
-        firstPlaceText.text = leaderboardUIHandler.GetWinners(0) + "\n з часом " + Math.Round(lapTimes[0], 2).ToString("F2");
-        secondPlaceText.text = leaderboardUIHandler.GetWinners(1) + "\n з часом " + Math.Round(lapTimes[1], 2).ToString("F2");
-        thirdPlaceText.text = leaderboardUIHandler.GetWinners(2) + "\n з часом " + Math.Round(lapTimes[2], 2).ToString("F2");
+       // firstPlaceText.text = leaderboardUIHandler.GetWinners(0) + "\n з часом " + Math.Round(lapTimes[0], 2).ToString("F2");
+      //  secondPlaceText.text = leaderboardUIHandler.GetWinners(1) + "\n з часом " + Math.Round(lapTimes[1], 2).ToString("F2");
+      //S  thirdPlaceText.text = leaderboardUIHandler.GetWinners(2) + "\n з часом " + Math.Round(lapTimes[2], 2).ToString("F2");
     }
 
     public void OnButtonPlayAgain()

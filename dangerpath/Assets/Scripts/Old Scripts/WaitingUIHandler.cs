@@ -1,12 +1,10 @@
 using Photon.Pun;
-using Photon.Pun.UtilityScripts;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WaitingUIHandler : MonoBehaviourPunCallbacks
+public class WaitingUIHandler : MonoBehaviour
 {
     public GameObject playerListTextPrefab;
 
@@ -14,7 +12,7 @@ public class WaitingUIHandler : MonoBehaviourPunCallbacks
 
     PlayerListTextHandler[] playerListTextHandler;
 
-    private void Awake()
+   /* private void Awake()
     {
         if (PhotonNetwork.IsMasterClient)
         {
@@ -90,5 +88,5 @@ public class WaitingUIHandler : MonoBehaviourPunCallbacks
     {
         GameManager.Instance.OnWaitingEnd();
         gameObject.SetActive(false);
-    }
+    }*/
 }

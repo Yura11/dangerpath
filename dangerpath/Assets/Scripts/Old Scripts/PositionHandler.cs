@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Photon.Realtime;
 
 public class PositionHandler : MonoBehaviour
 {
@@ -17,7 +16,7 @@ public class PositionHandler : MonoBehaviour
 
         foreach (CarLapCounter lapCounter in carLapCounters)
         {
-            lapCounter.OnPassCheckpoint += OnPassCheckpoint;
+          //  lapCounter.OnPassCheckpoint += OnPassCheckpoint;
         }
 
         leaderboardUIHandler = FindObjectOfType<LeaderboardUIHandler>();
@@ -27,27 +26,28 @@ public class PositionHandler : MonoBehaviour
     void Start()
     {
         // Initialize the leaderboard with carLapCounters
-        leaderboardUIHandler.UpdateList(carLapCounters);
-    }
+        /*   leaderboardUIHandler.UpdateList(carLapCounters);
+       }
 
 
 
-        // This method is called when a checkpoint is passed
-        void OnPassCheckpoint(CarLapCounter carLapCounter)
-    {
-        // Sort carLapCounters by the number of checkpoints passed and time at the last checkpoint
-        carLapCounters = carLapCounters
-            .OrderByDescending(s => s.GetNumberOfCheckpointsPassed())
-            .ThenBy(s => s.GetTimeAtLastCheckPoint())
-            .ToList();
+           // This method is called when a checkpoint is passed
+           void OnPassCheckpoint(CarLapCounter carLapCounter)
+       {
+           // Sort carLapCounters by the number of checkpoints passed and time at the last checkpoint
+           carLapCounters = carLapCounters
+               .OrderByDescending(s => s.GetNumberOfCheckpointsPassed())
+               .ThenBy(s => s.GetTimeAtLastCheckPoint())
+               .ToList();
 
-        // Find the position of the passed carLapCounter
-        int carPosition = carLapCounters.IndexOf(carLapCounter) + 1;
+           // Find the position of the passed carLapCounter
+           int carPosition = carLapCounters.IndexOf(carLapCounter) + 1;
 
-        // Set the car position
-        carLapCounter.SetCarPosition(carPosition);
+           // Set the car position
+           carLapCounter.SetCarPosition(carPosition);
 
-        // Update the leaderboard UI
-        leaderboardUIHandler.UpdateList(carLapCounters);
+           // Update the leaderboard UI
+           leaderboardUIHandler.UpdateList(carLapCounters);
+       }*/
     }
 }

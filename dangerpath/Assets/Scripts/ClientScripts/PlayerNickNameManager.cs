@@ -1,9 +1,5 @@
-using Mirror.Examples.Chat;
 using Newtonsoft.Json;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;

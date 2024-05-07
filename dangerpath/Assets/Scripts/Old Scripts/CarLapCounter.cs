@@ -1,13 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
-using Photon.Pun;
-using Photon.Realtime;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
-using JetBrains.Annotations;
 
 public class CarLapCounter : MonoBehaviour
 {
@@ -39,7 +35,7 @@ public class CarLapCounter : MonoBehaviour
 
     private void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
+      //  gameManager = FindObjectOfType<GameManager>();
     }
     public void SetCarPosition(int position)
     {
@@ -83,11 +79,12 @@ public class CarLapCounter : MonoBehaviour
     // Обробка зіткнення з чекпоінтом
     void OnTriggerEnter2D(Collider2D collider2D)
     {
-        if(!PhotonNetwork.IsConnected)
+       // if(!PhotonNetwork.IsConnected)
+
         {
             return;
         }
-        if (collider2D.CompareTag("CheckPoints"))
+       // if (collider2D.CompareTag("CheckPoints"))
         {
             if (timer == null )
             {

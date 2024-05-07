@@ -24,14 +24,14 @@ public class TopDownCarController : MonoBehaviour
 
     public float ricochetForce = 10.0f; // Сила рикошету
 
-    private PhotonView View;
+   // private PhotonView View;
 
     private CarLapCounter lapCounter;
 
     void Awake()
     {
         carRigidbody2D = GetComponent<Rigidbody2D>();
-        View = GetComponent<PhotonView>();
+      //  View = GetComponent<PhotonView>();
         lapCounter = GetComponent<CarLapCounter>();
     }
 
@@ -44,7 +44,7 @@ public class TopDownCarController : MonoBehaviour
          //   ApplySteering();
          //   return;
        // }
-        if (PhotonNetwork.IsConnected) {
+       /* if (PhotonNetwork.IsConnected) {
             if (View && View.IsMine)
             {
                 ApplyEngineForce();
@@ -61,7 +61,7 @@ public class TopDownCarController : MonoBehaviour
             KillOrthogonalVelocity();
 
             ApplySteering();
-        }
+        }*/
             
     }
 

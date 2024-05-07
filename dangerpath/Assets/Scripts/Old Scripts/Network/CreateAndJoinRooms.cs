@@ -4,11 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
-using Photon.Realtime;
 
-public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
+public class CreateAndJoinRooms : MonoBehaviour
 {
-    public InputField CreateInput;
+  /*  public InputField CreateInput;
     public InputField JoinInput;
 
 
@@ -35,5 +34,6 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LoadLevel("GameOnline");
     }
-
+  */
 }
+ 

@@ -11,6 +11,13 @@ public class UImanager : MonoBehaviour
 
     public void OnClickPlayOnline()
     {
+        CrossScaneInfoHolder.GamerNickName = PlayerProfileManager.gamerNickName;
+        SceneManager.LoadScene("Lobby");
+    }
+
+    public void OnClickPlay()
+    {
+        CrossScaneInfoHolder.GamerNickName = GenerateRandomName(6);
         SceneManager.LoadScene("Lobby");
     }
 
@@ -50,5 +57,17 @@ public class UImanager : MonoBehaviour
     public void Settings_button()
     {
         _settings.SetActive(true);
+    }
+
+    public string GenerateRandomName(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // All uppercase English letters
+        var random = new System.Random();
+        var randomName = new char[length];
+        for (int i = 0; i < length; i++)
+        {
+            randomName[i] = chars[random.Next(chars.Length)];
+        }
+        return new string(randomName);
     }
 }

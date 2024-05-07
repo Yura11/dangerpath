@@ -1,11 +1,10 @@
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OnlineSetLeaderBoardItem : MonoBehaviourPunCallbacks
+public class OnlineSetLeaderBoardItem : MonoBehaviour
 {
     public GameObject leaderboardItemPrefab;
 
@@ -22,55 +21,56 @@ public class OnlineSetLeaderBoardItem : MonoBehaviourPunCallbacks
 
         // Ініціалізуємо масив, який буде зберігати інформацію про пункти таблиці лідерів
 
-        setLeaderboardItemInfo = new SetLeaderBoardItemInfo[PhotonNetwork.PlayerList.Length];
+        /*   setLeaderboardItemInfo = new SetLeaderBoardItemInfo[PhotonNetwork.PlayerList.Length];
 
-        AddPlayerLeaderboardInfo();
-    }
+           AddPlayerLeaderboardInfo();
+       }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        AddPlayerLeaderboardInfo();
-    }
+       public override void OnPlayerEnteredRoom(Player newPlayer)
+       {
+           AddPlayerLeaderboardInfo();
+       }
 
-    // Start is called before the first frame update
-    void Start()
-    {
+       // Start is called before the first frame update
+       void Start()
+       {
 
-    }
+       }
 
-    // Оновлення списку лідерів на основі переданого списку CarLapCounter
+       // Оновлення списку лідерів на основі переданого списку CarLapCounter
 
 
-    private void AddPlayerLeaderboardInfo()
-    {
-        // Створюємо новий масив з довжиною, більшою на один, ніж існуючий масив
-        SetLeaderBoardItemInfo[] newSetLeaderboardItemInfo = new SetLeaderBoardItemInfo[setLeaderboardItemInfo.Length];
+       private void AddPlayerLeaderboardInfo()
+       {
+           // Створюємо новий масив з довжиною, більшою на один, ніж існуючий масив
+           SetLeaderBoardItemInfo[] newSetLeaderboardItemInfo = new SetLeaderBoardItemInfo[setLeaderboardItemInfo.Length];
 
-        // Копіюємо всі існуючі елементи в новий масив
-        if (setLeaderboardItemInfo.Length != newSetLeaderboardItemInfo.Length)
-        {
-            for (int i = 0; i < setLeaderboardItemInfo.Length - 1; i++)
-            {
-                newSetLeaderboardItemInfo[i] = setLeaderboardItemInfo[i];
-            }
-        }
-        // Тепер змінна setLeaderboardItemInfo вказує на новий масив
-        setLeaderboardItemInfo = newSetLeaderboardItemInfo;
+           // Копіюємо всі існуючі елементи в новий масив
+           if (setLeaderboardItemInfo.Length != newSetLeaderboardItemInfo.Length)
+           {
+               for (int i = 0; i < setLeaderboardItemInfo.Length - 1; i++)
+               {
+                   newSetLeaderboardItemInfo[i] = setLeaderboardItemInfo[i];
+               }
+           }
+           // Тепер змінна setLeaderboardItemInfo вказує на новий масив
+           setLeaderboardItemInfo = newSetLeaderboardItemInfo;
 
-        // Проходимось по усіх CarLapCounter і створюємо відповідні об'єкти таблиці лідерів
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            GameObject leaderboardInfoGameObject = Instantiate(leaderboardItemPrefab, leaderboardLayoutGroup.transform);
+           // Проходимось по усіх CarLapCounter і створюємо відповідні об'єкти таблиці лідерів
+           for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+           {
+               GameObject leaderboardInfoGameObject = Instantiate(leaderboardItemPrefab, leaderboardLayoutGroup.transform);
 
-            // Додаємо компонент SetLeaderBoardItemInfo до створеного об'єкта
-            setLeaderboardItemInfo[i] = leaderboardInfoGameObject.GetComponent<SetLeaderBoardItemInfo>();
+               // Додаємо компонент SetLeaderBoardItemInfo до створеного об'єкта
+               setLeaderboardItemInfo[i] = leaderboardInfoGameObject.GetComponent<SetLeaderBoardItemInfo>();
 
-            // Встановлюємо текст позиції для кожного пункта таблиці лідерів
-            setLeaderboardItemInfo[i].SetPositionText($"{i + 1}.");
-            foreach (Player player in PhotonNetwork.PlayerList)
-            {
-                setLeaderboardItemInfo[i].SetDriverName(player.NickName);
-            }
-        }
+               // Встановлюємо текст позиції для кожного пункта таблиці лідерів
+               setLeaderboardItemInfo[i].SetPositionText($"{i + 1}.");
+               foreach (Player player in PhotonNetwork.PlayerList)
+               {
+                   setLeaderboardItemInfo[i].SetDriverName(player.NickName);
+               }
+           }
+       }*/
     }
 }

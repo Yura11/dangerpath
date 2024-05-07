@@ -4,15 +4,25 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.SceneManagement;
 using System.Linq;
-using Photon.Realtime;
 
 public class CustomNetworkManager : NetworkManager
 {
+    public bool autoStartServer = false;
+
     private GameRoomManager gameRoomManager;
     public static event Action<List<GameRoom>> OnLobbiesUpdated;
     public static Dictionary<Guid, GameRoom> openMatches = new Dictionary<Guid, GameRoom>();
     public static Dictionary<Guid, HashSet<NetworkConnectionToClient>> matchConnections = new Dictionary<Guid, HashSet<NetworkConnectionToClient>>();
     public static List<NetworkConnectionToClient> waitingConnections = new List<NetworkConnectionToClient>();
+
+    public override void Awake()
+    {
+        base.Awake();
+        if (autoStartServer)
+        {
+            StartServer(); // Automatically start the server if autoStartServer is true
+        }
+    }
 
     public void CreateRoom(string roomName, int maxPlayers, int mapNumber, int numberOfLaps, NetworkConnection conn, string nickname)
     {
@@ -84,17 +94,6 @@ public class CustomNetworkManager : NetworkManager
     }
 
     #region Delete in future 
-    public string GenerateRandomName(int length)
-    {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // All uppercase English letters
-        var random = new System.Random();
-        var randomName = new char[length];
-        for (int i = 0; i < length; i++)
-        {
-            randomName[i] = chars[random.Next(chars.Length)];
-        }
-        return new string(randomName);
-    }
 
     public void LogPlayerNicknames(GameRoom room)
     {

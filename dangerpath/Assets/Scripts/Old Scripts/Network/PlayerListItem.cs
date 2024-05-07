@@ -1,12 +1,11 @@
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlayerListItem : MonoBehaviourPunCallbacks
-{
+public class PlayerListItem : MonoBehaviour
+{/*
     [SerializeField] TMP_Text text;
     Player player;
     [SerializeField] GameObject PlayerListItemPrefab;
@@ -36,5 +35,5 @@ public class PlayerListItem : MonoBehaviourPunCallbacks
 public override void OnLeftRoom()
     {
         Destroy(gameObject);
-    }
+    }*/
 }

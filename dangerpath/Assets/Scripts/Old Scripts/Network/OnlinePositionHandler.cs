@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
 using System;
 
-public class OnlinePositionHandler : MonoBehaviourPunCallbacks
+public class OnlinePositionHandler : MonoBehaviour
 {
     LeaderboardUIHandler leaderboardUIHandler;
     List<CarLapCounter> carLapCounters = new List<CarLapCounter>();
@@ -20,10 +19,10 @@ public class OnlinePositionHandler : MonoBehaviourPunCallbacks
     public void InitializeLeaderboard()
     {
         // Initialize the leaderboard with carLapCounters
-        leaderboardUIHandler.UpdateList(carLapCounters);
+       // leaderboardUIHandler.UpdateList(carLapCounters);
     }
 
-    public void FindPlayers()
+ /*   public void FindPlayers()
     {
         CarLapCounter[] NewPlayers = FindObjectsOfType<CarLapCounter>();
         // Додайте ваш код тут, який ви хочете виконати після натискання пробілу
@@ -61,5 +60,5 @@ public class OnlinePositionHandler : MonoBehaviourPunCallbacks
 
         // Update the leaderboard UI
         leaderboardUIHandler.UpdateList(carLapCounters);
-    }
+    }*/
 }

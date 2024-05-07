@@ -12,7 +12,7 @@ public class carmove : MonoBehaviour
     [SerializeField] private AudioSource Soundaffect2;
     private bool isButtonPressed;
 
-    PhotonView View;
+ //   PhotonView View;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +21,7 @@ public class carmove : MonoBehaviour
         moveSpeed = 5f;
         rotationSpeed = 250f;   
         isButtonPressed = false;
-        View = GetComponent<PhotonView>();
+       // View = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame

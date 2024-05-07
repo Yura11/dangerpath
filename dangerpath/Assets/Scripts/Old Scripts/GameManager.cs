@@ -1,16 +1,15 @@
-using Photon.Realtime;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Photon.Pun;
 using System.Threading.Tasks;
 using System.Threading;
 
 // Визначення станів гри
 public enum GameStates {waiting, countDown, running, raceOver };
 
-public class GameManager : MonoBehaviourPunCallbacks
+public class GameManager : MonoBehaviour
 {
     bool Leftloby=false;
     SpawnPlayers spawnPlayers;
@@ -30,13 +29,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        PhotonNetwork.AutomaticallySyncScene = true;
+     //   PhotonNetwork.AutomaticallySyncScene = true;
         countDownUIHandler = FindObjectOfType<CountDownUIHandler>();
-        leaderboardUIHandler = FindObjectOfType<LeaderboardUIHandler>();
-        onlinePositionHandler = FindObjectOfType<OnlinePositionHandler>();
-        spawnPlayers = FindAnyObjectByType<SpawnPlayers>();
-        gameOverHandler = FindAnyObjectByType<GameOverHandler>();
-        waitingUIHandler = FindAnyObjectByType<WaitingUIHandler>();
+       // leaderboardUIHandler = FindObjectOfType<LeaderboardUIHandler>();
+       // onlinePositionHandler = FindObjectOfType<OnlinePositionHandler>();
+     //   spawnPlayers = FindAnyObjectByType<SpawnPlayers>();
+     //   gameOverHandler = FindAnyObjectByType<GameOverHandler>();
+      //  waitingUIHandler = FindAnyObjectByType<WaitingUIHandler>();
         // Перевірка, чи існує екземпляр GameManager
         if (Instance == null)
             Instance = this;
@@ -47,7 +46,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
        // DontDestroyOnLoad(gameObject); // Забезпечення незнищенності цього об'єкта при завантаженні нових сцен
-        leaderboardUIHandler.gameObject.SetActive(false);
+      //  leaderboardUIHandler.gameObject.SetActive(false);
     }
 
     // Ініціалізація гри
@@ -69,10 +68,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     // Логіка старту рівня
     void LevelStart()
     {
-        if (PhotonNetwork.IsConnected)
-        {
-            gameState = GameStates.waiting; // Встановлення стану гри в режим
-        }else
+       // if (/*PhotonNetwork.IsConnected*/)
+      //  {
+        //    gameState = GameStates.waiting; // Встановлення стану гри в режим
+       // }else
         {
             gameState= GameStates.running;
         }
@@ -95,18 +94,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             Destroy(carController.gameObject);
         }
-        waitingUIHandler.gameObject.SetActive(true);
+      //  waitingUIHandler.gameObject.SetActive(true);
         countDownUIHandler.gameObject.SetActive(true);
         countDownUIHandler.countDownText.text = " ";
-        leaderboardUIHandler.gameObject.SetActive(false) ;
+      //  leaderboardUIHandler.gameObject.SetActive(false) ;
     }
 
     public void OnWaitingEnd()
     {
         gameState = GameStates.countDown;
-        spawnPlayers.SpawnPlayer();
+      //  spawnPlayers.SpawnPlayer();
         countDownUIHandler.CountDownStart();
-        leaderboardUIHandler.gameObject.SetActive(true);
+      //  leaderboardUIHandler.gameObject.SetActive(true);
         Debug.Log("Waiting end");
     }
 
@@ -114,8 +113,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void OnRaceStart()
     {
         Debug.Log("OnRaceStart");
-        spawnPlayers.RecolorPlayersObjects();
-        spawnPlayers.RenamePlayersObjects();
+     //   spawnPlayers.RecolorPlayersObjects();
+     //   spawnPlayers.RenamePlayersObjects();
         Resetleaderboard();
         carLapCounters = FindObjectsOfType<CarLapCounter>();
         gameState = GameStates.running; // Зміна стану гри на "running"
@@ -152,7 +151,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        PhotonNetwork.AddCallbackTarget(this);
+      //  PhotonNetwork.AddCallbackTarget(this);
     }
 
     // Логіка, що виконується при завантаженні нової сцени
@@ -161,15 +160,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         LevelStart(); // Виклик методу LevelStart
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer)
-    {
-        Leftloby = true;
-    }
+//    public override void OnPlayerLeftRoom(Player otherPlayer)
+  //  {
+  //      Leftloby = true;
+ //   }
 
     private void Resetleaderboard()
     {
-        onlinePositionHandler.FindPlayers();
-        leaderboardUIHandler.CreateLeaderBoardItems();
+       // onlinePositionHandler.FindPlayers();
+      //  leaderboardUIHandler.CreateLeaderBoardItems();
         onlinePositionHandler.InitializeLeaderboard();
         Debug.Log("List Updated");
         Leftloby = false;

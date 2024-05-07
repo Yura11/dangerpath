@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
-using Photon.Realtime;
 using Photon.Pun.Demo.PunBasics;
 
-public class SpawnPlayers : MonoBehaviourPunCallbacks
+public class SpawnPlayers : MonoBehaviour
 {
     
     public GameObject playerPrefab;
@@ -26,7 +25,7 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
 
     private bool isRoomOwner = false;
 
-    private PhotonView photonView; // Додайте це поле
+   /* private PhotonView photonView; // Додайте це поле
 
 
 
@@ -188,5 +187,5 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
                 Debug.LogError("PhotonView not found on object: " + carController.gameObject.name);
             }
         }
-    }
+    }*/
 }

@@ -4,7 +4,6 @@ using System.Collections;
 using Newtonsoft.Json;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
-using Codice.Client.BaseCommands;
 
 public class RegistrationManager : MonoBehaviour
 {

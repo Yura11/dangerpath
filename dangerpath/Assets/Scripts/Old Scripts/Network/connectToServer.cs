@@ -4,22 +4,22 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 
-public class connectToServer : MonoBehaviourPunCallbacks  // Fixed here
+public class connectToServer : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        PhotonNetwork.ConnectUsingSettings();
+       // PhotonNetwork.ConnectUsingSettings();
     }
 
-    public override void OnConnectedToMaster()
-    {
-        PhotonNetwork.JoinLobby();
-    }
-
+   // public override void OnConnectedToMaster()
+    //{
+     //   PhotonNetwork.JoinLobby();
+    //}
+    
     // Small typo fix: "OnJoinedLoby" should be "OnJoinedLobby"
-    public override void OnJoinedLobby()
-    {
-        SceneManager.LoadScene("Lobby");
-    }
+   // public override void OnJoinedLobby()
+   // {
+    //    SceneManager.LoadScene("Lobby");
+   // }
 }

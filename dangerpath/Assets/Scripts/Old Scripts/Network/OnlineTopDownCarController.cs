@@ -23,12 +23,12 @@ public class OnlineTopDownCarController : MonoBehaviour
 
     public float ricochetForce = 10.0f; // Сила рикошету
 
-    private PhotonView View;
+   // private PhotonView View;
 
     void Awake()
     {
         carRigidbody2D = GetComponent<Rigidbody2D>();
-        View = GetComponent<PhotonView>();
+       // View = GetComponent<PhotonView>();
     }
 
 
@@ -36,14 +36,14 @@ public class OnlineTopDownCarController : MonoBehaviour
     {
         if (GameManager.Instance.GetGameState() != GameStates.running)
             return;
-        if (View && View.IsMine)
+      /*  if (View && View.IsMine)
         {
             ApplyEngineForce();
 
             KillOrthogonalVelocity();
 
             ApplySteering();
-        }
+        }*/
     }
 
 
