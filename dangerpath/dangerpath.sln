@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripts", "Scripts.csproj", "{9DEA4038-7C79-17A7-E129-D650C5C21D6C}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirror.Examples", "Mirror.Examples.csproj", "{D2A17797-55B9-EE0C-EECB-D0DAD547828B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirror.Components", "Mirror.Components.csproj", "{7431C60A-AC72-8273-2CFB-4F83E3F5763A}"
@@ -10,8 +12,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirror.Hosting", "Mirror.Hosting.csproj", "{933B88A7-4CAC-E193-E8B2-BCBD10AF82C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Mirror.CodeGen", "Unity.Mirror.CodeGen.csproj", "{ED19A5DF-F6CD-2C45-8144-7D0CD377502F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripts", "Scripts.csproj", "{9DEA4038-7C79-17A7-E129-D650C5C21D6C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirror.Editor", "Mirror.Editor.csproj", "{FB0A5EFC-1CC3-B789-2FF0-07D0580EA09B}"
 EndProject
@@ -39,6 +39,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9DEA4038-7C79-17A7-E129-D650C5C21D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DEA4038-7C79-17A7-E129-D650C5C21D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DEA4038-7C79-17A7-E129-D650C5C21D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DEA4038-7C79-17A7-E129-D650C5C21D6C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D2A17797-55B9-EE0C-EECB-D0DAD547828B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D2A17797-55B9-EE0C-EECB-D0DAD547828B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2A17797-55B9-EE0C-EECB-D0DAD547828B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -59,10 +63,6 @@ Global
 		{ED19A5DF-F6CD-2C45-8144-7D0CD377502F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED19A5DF-F6CD-2C45-8144-7D0CD377502F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED19A5DF-F6CD-2C45-8144-7D0CD377502F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9DEA4038-7C79-17A7-E129-D650C5C21D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9DEA4038-7C79-17A7-E129-D650C5C21D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9DEA4038-7C79-17A7-E129-D650C5C21D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9DEA4038-7C79-17A7-E129-D650C5C21D6C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FB0A5EFC-1CC3-B789-2FF0-07D0580EA09B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB0A5EFC-1CC3-B789-2FF0-07D0580EA09B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB0A5EFC-1CC3-B789-2FF0-07D0580EA09B}.Release|Any CPU.ActiveCfg = Release|Any CPU

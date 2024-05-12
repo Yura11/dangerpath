@@ -1,4 +1,5 @@
 using Mirror;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,7 @@ public class UIManager : MonoBehaviour
     public GameObject startGameBTN;
     public Transform lobbyListParent;
     public Transform playersListParent;
+    public Text ErrorLobbyText;
     public static UIManager Instance { get; private set; }
 
     void Awake()
@@ -46,6 +48,19 @@ public class UIManager : MonoBehaviour
         CustomNetworkManager.OnLobbiesUpdated -= UpdateLobbyList;
     }
 
+    public void GetPlayersCarDate(Guid RoomId, string Message, bool GameAbleToStart)
+    {
+        if (GameAbleToStart)
+        {
+            PlayersChosenCarData request = new PlayersChosenCarData { RoomId = RoomId, CarId = LobbyCarListUI.GetIdOfChosenCar() };
+            NetworkClient.Send(request);
+        } 
+        else 
+        {
+            ErrorLobbyText.gameObject.SetActive(true);
+            ErrorLobbyText.text = Message;
+        }
+    }
 
     public void UpdateLobbyList(List<GameRoom> lobbies)
     {
@@ -178,6 +193,13 @@ public class UIManager : MonoBehaviour
         readyBTN.SetActive(true);
         notReadyBTN.SetActive(false);
         startGameBTN.SetActive(false);
+    }
+
+    public void OnStartGameBTNClicked()
+    {
+        ErrorLobbyText.gameObject.SetActive(false);
+        StartGameRequest request = new StartGameRequest { };
+        NetworkClient.Send(request);
     }
 
     private void OnLobbyListReceived(LobbyListMessage message)

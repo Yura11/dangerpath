@@ -12,6 +12,8 @@ public class NetworkPlayer : NetworkBehaviour
     public string connectionId;
     [SyncVar]
     public bool playerReadyStatus;
+    [SyncVar]
+    public int carId;
 
     public void SetPlayer(string name, bool ownerStatus, string connId)
     {

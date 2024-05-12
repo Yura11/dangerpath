@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
+using static CustomNetworkManager;
 
 public class MessageRequests : NetworkMessage
 {
@@ -93,4 +94,22 @@ public struct PlayerStatusMessage : NetworkMessage
 public struct SetPlayerReadyStatusRequest : NetworkMessage
 {
     public bool PlayerReadyStatus;
+}
+public struct StartGameRequest : NetworkMessage { }
+
+public struct StartGameResponse : NetworkMessage 
+{
+    public Guid RoomId;
+    public string Message;
+    public bool GameAbleToStart;
+}
+
+public struct PlayersChosenCarData : NetworkMessage 
+{
+    public Guid RoomId;
+    public int CarId;
+}
+
+public struct PlayersChosenCarDataResponse : NetworkMessage
+{
 }

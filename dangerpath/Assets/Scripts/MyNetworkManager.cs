@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEditor.MemoryProfiler;
 
 public class CustomNetworkManager : NetworkManager
 {
@@ -123,6 +124,8 @@ public class CustomNetworkManager : NetworkManager
         NetworkServer.RegisterHandler<JoinRoomRequest>(OnJoinRoomRequestReceived);
         NetworkServer.RegisterHandler<PlayerStatusRequest>(OnPlayerStatusRequestReceived);
         NetworkServer.RegisterHandler<SetPlayerReadyStatusRequest>(OnSetPlayerReadyStatusRequestReceived);
+        NetworkServer.RegisterHandler<StartGameRequest>(OnStartGameRequestReceived);
+        NetworkServer.RegisterHandler<PlayersChosenCarData>(OnPlayersChosenCarDataReceived);
     }
 
     private void OnRequestLobbyListReceived(NetworkConnection conn, RequestLobbyListMessage message)
@@ -289,6 +292,88 @@ public class CustomNetworkManager : NetworkManager
         }
     }
 
+    private void OnStartGameRequestReceived(NetworkConnection conn, StartGameRequest request)
+    {
+        Debug.Log("Start Game Request Received");
+        if (!(conn is NetworkConnectionToClient clientConn))
+        {
+            Debug.LogError("StartGameRequest received from a non-client connection.");
+            return;
+        }
+
+        // «находимо к≥мнату, де знаходитьс€ гравець за `connectionId`.
+        foreach (var room in CustomNetworkManager.openMatches.Values)
+        {
+            var player = room.Players.FirstOrDefault(p => p.connectionId == clientConn.connectionId.ToString());
+
+            // якщо гравець знайдений у к≥мнат≥
+            if (player != null)
+            {
+                // ѕерев≥р€Їмо, чи вс≥ гравц≥ в лобб≥ готов≥
+                bool allPlayersReady = room.Players.All(p => p.playerReadyStatus);
+
+                if (allPlayersReady)
+                {
+                    // якщо вс≥ гравц≥ готов≥, в≥дправл€Їмо пов≥домленн€ про початок гри вс≥м кл≥Їнтам у лобб≥
+                    StartGameResponse startGameResponse = new StartGameResponse { GameAbleToStart = true, RoomId = room.RoomId };
+                    foreach (var connection in CustomNetworkManager.matchConnections[room.RoomId])
+                    {
+                        connection.Send(startGameResponse);
+                    }
+                    Debug.Log("Game started in room: " + room.RoomName);
+                }
+                else
+                {
+                    // якщо не вс≥ гравц≥ готов≥, в≥дправл€Їмо в≥дпов≥дь т≥льки запитувачу
+                    clientConn.Send(new StartGameResponse { GameAbleToStart = false, Message = "Not all players are ready." });
+                    Debug.Log("Not all players are ready in room: " + room.RoomName);
+                }
+                return; // «ак≥нчуЇмо обробку запиту
+            }
+        }
+
+        // якщо гравець не знайдений у к≥мнат≥
+        Debug.LogError($"Player with connection ID {clientConn.connectionId} not found in any room.");
+        conn.Send(new StartGameResponse { GameAbleToStart = false, Message = "You are not in any room." });
+    }
+
+    private void OnPlayersChosenCarDataReceived(NetworkConnection conn, PlayersChosenCarData data)
+    {
+        if (!(conn is NetworkConnectionToClient clientConn))
+        {
+            Debug.LogError("PlayersChosenCarData received from a non-client connection.");
+            return;
+        }
+
+        // «находимо к≥мнату за RoomId
+        if (CustomNetworkManager.openMatches.TryGetValue(data.RoomId, out GameRoom room))
+        {
+            // «находимо гравц€ в к≥мнат≥ за connectionId
+            var player = room.Players.FirstOrDefault(p => p.connectionId == clientConn.connectionId.ToString());
+
+            if (player != null)
+            {
+                // «м≥нюЇмо carId гравц€
+                player.carId = data.CarId;
+
+                // ќновлюЇмо стан гри
+                CustomNetworkManager.openMatches[data.RoomId] = room;
+
+                // ЌадсилаЇмо в≥дпов≥дь
+                PlayersChosenCarDataResponse response = new PlayersChosenCarDataResponse();
+                clientConn.Send(response);
+            }
+            else
+            {
+                Debug.LogError($"Player with connection ID {clientConn.connectionId} not found in room {data.RoomId}.");
+            }
+        }
+        else
+        {
+            Debug.LogError($"Room with ID {data.RoomId} not found.");
+        }
+    }
+
     #endregion
 
     #region Client System Callbacks
@@ -302,6 +387,8 @@ public class CustomNetworkManager : NetworkManager
         NetworkClient.RegisterHandler<BroadcastLobbyLeaft>(OnBroadcastLobbyLeaftReceived);
         NetworkClient.RegisterHandler<PlayerListUpdateMessage>(OnPlayerListUpdateReceived);
         NetworkClient.RegisterHandler<PlayerStatusMessage>(OnPlayerStatusMessageReceived);
+        NetworkClient.RegisterHandler<StartGameResponse>(OnStartGameResponseReceived);
+        NetworkClient.RegisterHandler<PlayersChosenCarDataResponse>(OnPlayersChosenCarDataResponseReceived);
     }
 
     private void OnLobbyListReceived(LobbyListMessage message)
@@ -326,7 +413,6 @@ public class CustomNetworkManager : NetworkManager
         if (response.success)
         {
             Debug.Log("Successfully joined the room.");
-            SceneManager.LoadScene("LobbyScene");
         }
         UIManager.Instance.UpdateUIOnRoomJoin();
     }
@@ -371,9 +457,20 @@ public class CustomNetworkManager : NetworkManager
         UIManager.Instance.SetNotReadyAndStartBTNs(message.OwnerStatus);
     }
 
+    private void OnStartGameResponseReceived(StartGameResponse response)
+    {
+        UIManager.Instance.GetPlayersCarDate(response.RoomId, response.Message, response.GameAbleToStart);
+    }
+
+
     void Start()
     {
         NetworkClient.RegisterHandler<PlayerListUpdateMessage>(OnPlayerListUpdateReceived);
+    }
+
+    private void OnPlayersChosenCarDataResponseReceived(PlayersChosenCarDataResponse response)
+    {
+        SceneManager.LoadScene("Game");
     }
 
     #endregion
