@@ -111,6 +111,32 @@ public class CustomNetworkManager : NetworkManager
             Debug.Log(player.playerName); // Assuming playerName is the attribute storing the nickname
         }
     }
+
+    private void OnLogPlayerNicknamesRequestReceived(NetworkConnection conn, LogPlayerNicknamesRequest data)
+    {
+        if (conn is NetworkConnectionToClient clientConn)
+        {
+            // «находимо к≥мнату, де знаходитьс€ гравець за `connectionId`.
+            foreach (var room in CustomNetworkManager.openMatches.Values)
+            {
+                var player = room.Players.FirstOrDefault(p => p.connectionId == clientConn.connectionId.ToString());
+
+                // якщо гравець знайдений, виводимо ≥нформац≥ю про к≥мнату.
+                if (player != null)
+                {
+                    LogPlayerNicknames(room);
+                    return;
+                }
+            }
+
+            // якщо гравц€ з таким connectionId не знайдено.
+            Debug.LogError($"Player not found with connection ID: {clientConn.connectionId}");
+        }
+        else
+        {
+            Debug.LogError("Received log player nicknames request from a non-client connection.");
+        }
+    }
     #endregion
 
     #region Server System Callbacks
@@ -126,6 +152,9 @@ public class CustomNetworkManager : NetworkManager
         NetworkServer.RegisterHandler<SetPlayerReadyStatusRequest>(OnSetPlayerReadyStatusRequestReceived);
         NetworkServer.RegisterHandler<StartGameRequest>(OnStartGameRequestReceived);
         NetworkServer.RegisterHandler<PlayersChosenCarData>(OnPlayersChosenCarDataReceived);
+        #region Delete in future 
+        NetworkServer.RegisterHandler<LogPlayerNicknamesRequest>(OnLogPlayerNicknamesRequestReceived);
+        #endregion
     }
 
     private void OnRequestLobbyListReceived(NetworkConnection conn, RequestLobbyListMessage message)
@@ -355,6 +384,7 @@ public class CustomNetworkManager : NetworkManager
             {
                 // «м≥нюЇмо carId гравц€
                 player.carId = data.CarId;
+                room.GameState = true;
 
                 // ќновлюЇмо стан гри
                 CustomNetworkManager.openMatches[data.RoomId] = room;
@@ -468,8 +498,10 @@ public class CustomNetworkManager : NetworkManager
         NetworkClient.RegisterHandler<PlayerListUpdateMessage>(OnPlayerListUpdateReceived);
     }
 
-    private void OnPlayersChosenCarDataResponseReceived(PlayersChosenCarDataResponse response)
+    public void OnPlayersChosenCarDataResponseReceived(PlayersChosenCarDataResponse response)
     {
+        //NetworkManager manager = NetworkManager.singleton;
+        //manager.ServerChangeScene("Game");
         SceneManager.LoadScene("Game");
     }
 

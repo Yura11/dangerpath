@@ -110,6 +110,8 @@ public struct PlayersChosenCarData : NetworkMessage
     public int CarId;
 }
 
-public struct PlayersChosenCarDataResponse : NetworkMessage
-{
-}
+public struct PlayersChosenCarDataResponse : NetworkMessage { }
+
+#region Delete in future 
+public struct LogPlayerNicknamesRequest : NetworkMessage { }
+#endregion
