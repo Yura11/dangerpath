@@ -390,7 +390,11 @@ public class CustomNetworkManager : NetworkManager
                 CustomNetworkManager.openMatches[data.RoomId] = room;
 
                 // Надсилаємо відповідь
-                PlayersChosenCarDataResponse response = new PlayersChosenCarDataResponse();
+                PlayersChosenCarDataResponse response = new PlayersChosenCarDataResponse()
+                {
+                    MapNumber = room.MapNumber,
+                    PlayerList = room.Players,
+                };
                 clientConn.Send(response);
             }
             else
@@ -502,6 +506,8 @@ public class CustomNetworkManager : NetworkManager
     {
         //NetworkManager manager = NetworkManager.singleton;
         //manager.ServerChangeScene("Game");
+        CrossScaneInfoHolder.PlayerList = response.PlayerList;
+        CrossScaneInfoHolder.MapNumber = response.MapNumber;
         SceneManager.LoadScene("Game");
     }
 

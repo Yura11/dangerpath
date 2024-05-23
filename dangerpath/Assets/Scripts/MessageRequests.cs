@@ -95,7 +95,9 @@ public struct SetPlayerReadyStatusRequest : NetworkMessage
 {
     public bool PlayerReadyStatus;
 }
-public struct StartGameRequest : NetworkMessage { }
+public struct StartGameRequest : NetworkMessage 
+{
+}
 
 public struct StartGameResponse : NetworkMessage 
 {
@@ -110,7 +112,18 @@ public struct PlayersChosenCarData : NetworkMessage
     public int CarId;
 }
 
-public struct PlayersChosenCarDataResponse : NetworkMessage { }
+public struct PlayersChosenCarDataResponse : NetworkMessage 
+{
+    public int MapNumber;
+    public List<NetworkPlayer> PlayerList;
+}
+
+public struct AddPlayerMessage : NetworkMessage
+{
+    public string playerName;
+    public bool isOwner;
+    public int carId;
+}
 
 #region Delete in future 
 public struct LogPlayerNicknamesRequest : NetworkMessage { }

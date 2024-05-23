@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Threading;
 
 // Визначення станів гри
-public enum GameStates {waiting, countDown, running, raceOver };
+public enum GameStates {countDown, running, raceOver };
 
 public class GameManager : MonoBehaviour
 {
@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance = null;
 
     // Змінна, що відображає поточний стан гри
-    GameStates gameState = GameStates.waiting;
+    GameStates gameState = GameStates.countDown;
 
     private void Awake()
     {
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     // Ініціалізація гри
     void Start()
     {
-
+        countDownUIHandler.CountDownStart();
     }
 
     void Update()
@@ -87,7 +87,6 @@ public class GameManager : MonoBehaviour
 
     public void PlayAgain()
     {
-        gameState = GameStates.waiting;
         TopDownCarController[] carControllers = FindObjectsOfType<TopDownCarController>();
 
         foreach (TopDownCarController carController in carControllers)
@@ -98,15 +97,6 @@ public class GameManager : MonoBehaviour
         countDownUIHandler.gameObject.SetActive(true);
         countDownUIHandler.countDownText.text = " ";
       //  leaderboardUIHandler.gameObject.SetActive(false) ;
-    }
-
-    public void OnWaitingEnd()
-    {
-        gameState = GameStates.countDown;
-      //  spawnPlayers.SpawnPlayer();
-        countDownUIHandler.CountDownStart();
-      //  leaderboardUIHandler.gameObject.SetActive(true);
-        Debug.Log("Waiting end");
     }
 
     // Логіка старту гонки
