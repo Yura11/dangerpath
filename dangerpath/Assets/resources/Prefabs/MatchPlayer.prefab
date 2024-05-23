@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1204658229548937417}
   - component: {fileID: 7660209086417859164}
   - component: {fileID: 8440820164238801324}
-  - component: {fileID: -3992624706284245286}
   m_Layer: 0
   m_Name: MatchPlayer
   m_TagString: Untagged
@@ -68,18 +67,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   playerName: Player
---- !u!114 &-3992624706284245286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3559083313143303799}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d17e718851449a6879986e45c458fb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0.1
+  isOwner: 0
+  connectionId: 
+  playerReadyStatus: 0
+  carId: 0

@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
-using Photon.Pun;
+using Mirror;
 
 [RequireComponent(typeof(Rigidbody2D))]
 
-public class TopDownCarController : MonoBehaviour
+public class TopDownCarController : NetworkBehaviour
 {
     [Header("Car Setings")]
     public float driftFactor = 0.95f;
@@ -38,31 +37,19 @@ public class TopDownCarController : MonoBehaviour
 
     void FixedUpdate()
     {
-        //if (GameManager.Instance.GetGameState() != GameStates.running || lapCounter.isRaceComplete())
-       // {
-         //   KillOrthogonalVelocity();
-         //   ApplySteering();
-         //   return;
-       // }
-       /* if (PhotonNetwork.IsConnected) {
-            if (View && View.IsMine)
-            {
-                ApplyEngineForce();
-
-                KillOrthogonalVelocity();
-
-                ApplySteering();
-            } 
-        }
-        else
+        if (isLocalPlayer)
         {
+            Debug.Log("isLocalPlayer");
             ApplyEngineForce();
 
             KillOrthogonalVelocity();
 
             ApplySteering();
-        }*/
-            
+        }
+        else
+        {
+            Debug.Log("notLocalPlayer");
+        }            
     }
 
 

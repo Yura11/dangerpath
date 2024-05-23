@@ -125,6 +125,8 @@ public struct AddPlayerMessage : NetworkMessage
     public int carId;
 }
 
+public struct SpawnPlayerRequest : NetworkMessage { }
+
 #region Delete in future 
 public struct LogPlayerNicknamesRequest : NetworkMessage { }
 #endregion

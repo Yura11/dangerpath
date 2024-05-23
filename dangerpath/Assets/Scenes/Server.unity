@@ -227,6 +227,7 @@ GameObject:
   - component: {fileID: 1338756362}
   - component: {fileID: 1338756359}
   - component: {fileID: 1338756364}
+  - component: {fileID: 1338756365}
   m_Layer: 0
   m_Name: Network Manager (1)
   m_TagString: Untagged
@@ -334,3 +335,18 @@ MonoBehaviour:
   clientMaxReceivesPerTick: 1000
   clientSendQueueLimit: 10000
   clientReceiveQueueLimit: 10000
+--- !u!114 &1338756365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338756358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d36ec2ac0bdf02d42b848fdcce8565e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carPrefabs:
+  - {fileID: 6643688995138271935, guid: aeb6ea094e8841f4990d520af9d0850e, type: 3}
+  - {fileID: 8420724306643472157, guid: 6278d6ad6785f964396ad288159f1e8c, type: 3}

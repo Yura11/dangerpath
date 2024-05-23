@@ -152,6 +152,7 @@ public class CustomNetworkManager : NetworkManager
         NetworkServer.RegisterHandler<SetPlayerReadyStatusRequest>(OnSetPlayerReadyStatusRequestReceived);
         NetworkServer.RegisterHandler<StartGameRequest>(OnStartGameRequestReceived);
         NetworkServer.RegisterHandler<PlayersChosenCarData>(OnPlayersChosenCarDataReceived);
+        NetworkServer.RegisterHandler<SpawnPlayerRequest>(OnSpawnPlayerRequestReceived);
         #region Delete in future 
         NetworkServer.RegisterHandler<LogPlayerNicknamesRequest>(OnLogPlayerNicknamesRequestReceived);
         #endregion
@@ -344,11 +345,26 @@ public class CustomNetworkManager : NetworkManager
                 if (allPlayersReady)
                 {
                     // якщо вс≥ гравц≥ готов≥, в≥дправл€Їмо пов≥домленн€ про початок гри вс≥м кл≥Їнтам у лобб≥
-                    StartGameResponse startGameResponse = new StartGameResponse { GameAbleToStart = true, RoomId = room.RoomId };
-                    foreach (var connection in CustomNetworkManager.matchConnections[room.RoomId])
+                    StartGameResponse startGameResponse = new StartGameResponse
                     {
-                        connection.Send(startGameResponse);
+                        GameAbleToStart = true,
+                        RoomId = room.RoomId
+                    };
+
+                    // ЌадсилаЇмо пов≥домленн€ вс≥м гравц€м у к≥мнат≥
+                    foreach (var roomPlayer in room.Players)
+                    {
+                        var playerConnection = NetworkServer.connections.FirstOrDefault(conn => conn.Value.connectionId.ToString() == roomPlayer.connectionId).Value;
+                        if (playerConnection != null)
+                        {
+                            playerConnection.Send(startGameResponse);
+                        }
+                        else
+                        {
+                            Debug.LogError($"Connection for player with ID {roomPlayer.connectionId} not found.");
+                        }
                     }
+
                     Debug.Log("Game started in room: " + room.RoomName);
                 }
                 else
@@ -405,6 +421,25 @@ public class CustomNetworkManager : NetworkManager
         else
         {
             Debug.LogError($"Room with ID {data.RoomId} not found.");
+        }
+    }
+
+    private void OnSpawnPlayerRequestReceived(NetworkConnection conn, SpawnPlayerRequest request) 
+    {
+        if (!(conn is NetworkConnectionToClient clientConn))
+        {
+            Debug.LogError("Request received from a non-client connection.");
+            return;
+        }
+        foreach (var room in CustomNetworkManager.openMatches.Values)
+        {
+            var player = room.Players.FirstOrDefault(p => p.connectionId == clientConn.connectionId.ToString());
+
+            // якщо гравець знайдений у к≥мнат≥
+            if (player != null)
+            {
+                PlayerSpawner.Instance.SpawnPlayers(room.Players);
+            }
         }
     }
 
@@ -509,6 +544,15 @@ public class CustomNetworkManager : NetworkManager
         CrossScaneInfoHolder.PlayerList = response.PlayerList;
         CrossScaneInfoHolder.MapNumber = response.MapNumber;
         SceneManager.LoadScene("Game");
+        bool isOwner = CrossScaneInfoHolder.PlayerList
+        .Find(player => player.playerName == CrossScaneInfoHolder.GamerNickName)?.isOwner ?? false;
+
+        if (isOwner)
+        {
+            // ¬≥дправл€Їмо запит на спавн гравц€
+            SpawnPlayerRequest request = new SpawnPlayerRequest { };
+            NetworkClient.Send(request);
+        }
     }
 
     #endregion

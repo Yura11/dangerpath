@@ -10857,7 +10857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clientStarted: 0
+  clientStarted: 1
   sceneId: 0
   _assetId: 3952441825
   serverOnly: 0
@@ -10876,7 +10876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 1
-  syncMode: 0
+  syncMode: 1
   syncInterval: 0
   target: {fileID: 1970933315275556217}
   syncPosition: 1
@@ -10909,6 +10909,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed2e2defb51222e4697c703af7d4779b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   driftFactor: 0.95
   accelerationFactor: 30
   turnFactor: 3.5

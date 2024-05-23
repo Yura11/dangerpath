@@ -152,7 +152,7 @@ public class UIManager : MonoBehaviour
 
         LeaveRoomRequest request = new LeaveRoomRequest
         {
-            roomName = "test" // You need to dynamically set this based on the room the player is currently in
+            roomName = $"{CrossScaneInfoHolder.GamerNickName}'s room" // You need to dynamically set this based on the room the player is currently in
         };
         NetworkClient.Send(request);
         Debug.Log("LeaveRoomRequest send.");

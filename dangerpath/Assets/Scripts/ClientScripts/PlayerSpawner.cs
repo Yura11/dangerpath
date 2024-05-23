@@ -6,7 +6,7 @@ public class PlayerSpawner : MonoBehaviour
 {
     public static PlayerSpawner Instance { get; private set; }
 
-    public List<GameObject> carPrefabs; // Array of player prefabs, index corresponds to carId
+    public List<GameObject> playerPrefabs; // Array of player prefabs, index corresponds to carId
 
     private void Awake()
     {
@@ -20,27 +20,48 @@ public class PlayerSpawner : MonoBehaviour
         }
     }
 
-    public void SpawnPlayers()
+    public void SpawnPlayers(List<NetworkPlayer> PlayerList)
     {
-        foreach (var playerInfo in CrossScaneInfoHolder.PlayerList)
+        if (playerPrefabs == null || playerPrefabs.Count == 0)
         {
-            if (playerInfo.carId < carPrefabs.Count)
-            {
-                GameObject playerPrefab = carPrefabs[playerInfo.carId];
-                GameObject playerObject = Instantiate(playerPrefab, GetSpawnPosition(), Quaternion.identity);
-                NetworkServer.Spawn(playerObject);
+            Debug.LogError("Player prefabs are not set or empty.");
+            return;
+        }
 
-                // Configure player parameters
-                NetworkPlayer networkPlayer = playerObject.GetComponent<NetworkPlayer>();
-                if (networkPlayer != null)
-                {
-                    networkPlayer.SetPlayer(playerInfo.playerName, playerInfo.isOwner, playerInfo.connectionId);
-                    networkPlayer.playerReadyStatus = playerInfo.playerReadyStatus;
-                }
+        foreach (NetworkPlayer playerInfo in PlayerList)
+        {
+            if (playerInfo.carId < 0 || playerInfo.carId >= playerPrefabs.Count)
+            {
+                Debug.LogError($"Invalid carId {playerInfo.carId} for player {playerInfo.playerName}");
+                continue;
+            }
+
+            // ќбираЇмо префаб в≥дпов≥дно до carId
+            GameObject playerPrefab = playerPrefabs[playerInfo.carId];
+
+            if (playerPrefab == null)
+            {
+                Debug.LogError($"No prefab found for carId {playerInfo.carId}");
+                continue;
+            }
+
+            // —павнимо гравц€
+            GameObject playerObject = Instantiate(playerPrefab);
+            NetworkServer.Spawn(playerObject);
+
+            // ЌалаштовуЇмо дан≥ гравц€
+            NetworkPlayer networkPlayer = playerObject.GetComponent<NetworkPlayer>();
+            if (networkPlayer != null)
+            {
+                networkPlayer.SetPlayer(playerInfo.playerName, playerInfo.isOwner, playerInfo.connectionId);
+                networkPlayer.carId = playerInfo.carId;
+
+                // ƒодаЇмо гравц€ до списку
+                PlayerList.Add(networkPlayer);
             }
             else
             {
-                Debug.LogError($"Invalid carId {playerInfo.carId} for player {playerInfo.playerName}");
+                Debug.LogError($"NetworkPlayer component not found on prefab for carId {playerInfo.carId}");
             }
         }
     }

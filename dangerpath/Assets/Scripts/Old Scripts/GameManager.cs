@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("OnRaceStart");
      //   spawnPlayers.RecolorPlayersObjects();
      //   spawnPlayers.RenamePlayersObjects();
-        Resetleaderboard();
+       // Resetleaderboard();
         carLapCounters = FindObjectsOfType<CarLapCounter>();
         gameState = GameStates.running; // «м≥на стану гри на "running"
     }
