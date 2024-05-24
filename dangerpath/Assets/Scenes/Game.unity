@@ -339,10 +339,12 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 0}
+  playerPrefab: {fileID: 184577598442100497, guid: 446315c52da653740a7f112a41cd96e4, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 6643688995138271935, guid: aeb6ea094e8841f4990d520af9d0850e, type: 3}
+  - {fileID: 8420724306643472157, guid: 6278d6ad6785f964396ad288159f1e8c, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -1167,7 +1169,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 638799566}
-  - component: {fileID: 638799567}
   - component: {fileID: 638799565}
   m_Layer: 0
   m_Name: SpawnPlayers
@@ -1220,21 +1221,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &638799567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 638799563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d36ec2ac0bdf02d42b848fdcce8565e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPrefabs:
-  - {fileID: 6643688995138271935, guid: aeb6ea094e8841f4990d520af9d0850e, type: 3}
-  - {fileID: 8420724306643472157, guid: 6278d6ad6785f964396ad288159f1e8c, type: 3}
 --- !u!1 &722636774 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4462727383823127328, guid: 99f96c53e326b45459ede5c7c7c6536b, type: 3}

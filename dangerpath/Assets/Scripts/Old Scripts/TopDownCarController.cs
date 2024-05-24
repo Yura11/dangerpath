@@ -37,19 +37,19 @@ public class TopDownCarController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if (isLocalPlayer)
-        {
-            Debug.Log("isLocalPlayer");
+        //if (isLocalPlayer)
+        //{
+            //Debug.Log("isLocalPlayer");
             ApplyEngineForce();
 
             KillOrthogonalVelocity();
 
             ApplySteering();
-        }
-        else
-        {
+        //}
+        //else
+        //{
             Debug.Log("notLocalPlayer");
-        }            
+        //}            
     }
 
 

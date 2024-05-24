@@ -10576,7 +10576,7 @@ GameObject:
   - component: {fileID: -5714389291481160824}
   - component: {fileID: 1634872875305583750}
   m_Layer: 0
-  m_Name: "\u043C\u0430\u0448\u0438\u043D\u0430"
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10871,6 +10871,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed2e2defb51222e4697c703af7d4779b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   driftFactor: 0.95
   accelerationFactor: 30
   turnFactor: 3.5

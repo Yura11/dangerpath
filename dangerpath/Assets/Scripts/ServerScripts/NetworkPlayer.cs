@@ -19,16 +19,15 @@ public class NetworkPlayer : NetworkBehaviour
 
     public void SetPlayer(string name, bool ownerStatus, string connId)
     {
-            playerName = name;
-            isOwner = ownerStatus;
-            connectionId = connId;  // Set the connection ID
-            playerReadyStatus = isOwner;
+        playerName = name;
+        isOwner = ownerStatus;
+        connectionId = connId;
+        playerReadyStatus = isOwner;
     }
 
     public override void OnStartAuthority()
     {
         base.OnStartAuthority();
-
         carController = GetComponent<TopDownCarController>();
         if (carController != null)
         {
@@ -52,4 +51,18 @@ public class NetworkPlayer : NetworkBehaviour
         base.OnStartClient();
         Debug.Log($"{playerName} joined the game, owner status: {isOwner}");
     }
+
+    private void Update()
+    {
+
+
+        if (isLocalPlayer)
+        {
+            Debug.Log("isLocalPlayer");
+        }
+        else
+        {
+            Debug.Log("notLocalPlayer");
+        }
+    }  
 }
