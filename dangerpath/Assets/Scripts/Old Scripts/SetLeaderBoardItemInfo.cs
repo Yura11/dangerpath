@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class SetLeaderBoardItemInfo : MonoBehaviour
 {
+    public string playerName;
     public Text positionText;
     public Text driverNameText;
     // Start is called before the first frame update

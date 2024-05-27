@@ -34,7 +34,7 @@ public class PlayerSpawner : MonoBehaviour
             Debug.LogError("Player prefabs are not set or empty.");
             return;
         }
-
+        CrossScaneInfoHolder.PlayerList = gameRoom.Players;
         foreach (var playerInfo in gameRoom.Players)
         {
             // Find the prefab by carId
