@@ -94,6 +94,15 @@ public class CustomNetworkManager : NetworkManager
         conn.Send(response);
     }
 
+    private void UpdatePlayerData(ref NetworkPlayer targetPlayer, NetworkPlayer newData)
+    {
+        targetPlayer.playerName = newData.playerName;
+        targetPlayer.isOwner = newData.isOwner;
+        targetPlayer.connectionId = newData.connectionId;
+        targetPlayer.playerReadyStatus = newData.playerReadyStatus;
+        targetPlayer.carId = newData.carId;
+    }
+
     #region Delete in future 
 
     public void LogPlayerNicknames(GameRoom room)
@@ -153,6 +162,7 @@ public class CustomNetworkManager : NetworkManager
         NetworkServer.RegisterHandler<StartGameRequest>(OnStartGameRequestReceived);
         NetworkServer.RegisterHandler<PlayersChosenCarData>(OnPlayersChosenCarDataReceived);
         NetworkServer.RegisterHandler<SpawnPlayerRequest>(OnSpawnPlayerRequestReceived);
+        NetworkServer.RegisterHandler<OnPlayerPassedChecpoint>(OnPlayerPassedChecpointReceived);
         #region Delete in future 
         NetworkServer.RegisterHandler<LogPlayerNicknamesRequest>(OnLogPlayerNicknamesRequestReceived);
         #endregion
@@ -438,14 +448,37 @@ public class CustomNetworkManager : NetworkManager
             // якщо гравець знайдений у к≥мнат≥
             if (player != null)
             {
-                PlayerSpawner.Instance.SpawnPlayers(room.Players);
+                PlayerSpawner.Instance.SpawnPlayers(room);
+            }
+        }
+    }
+
+    private void OnPlayerPassedChecpointReceived(NetworkConnection conn, OnPlayerPassedChecpoint data)
+    {
+        if (conn is NetworkConnectionToClient clientConn)
+        {
+            // Find the room where the player is located based on the connection ID.
+            foreach (var kvp in CustomNetworkManager.openMatches)
+            {
+                var room = kvp.Value;
+
+                // Find the player by connectionId among all players in the room.
+                var player = room.Players.FirstOrDefault(p => p.connectionId == clientConn.connectionId.ToString());
+
+                // If the player is found, update the player's data with the received data.
+                if (player != null)
+                {
+                    UpdatePlayerData(ref player, data.player);
+                    Debug.Log($"Player data updated for {player.playerName} in room {room.RoomId}");
+                    break; // Exit the loop once the player is found and updated.
+                }
             }
         }
     }
 
     #endregion
 
-    #region Client System Callbacks
+                    #region Client System Callbacks
     public override void OnStartClient()
     {
         base.OnStartClient();

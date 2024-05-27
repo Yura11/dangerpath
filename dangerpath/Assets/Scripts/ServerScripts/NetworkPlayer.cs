@@ -14,8 +14,28 @@ public class NetworkPlayer : NetworkBehaviour
     public bool playerReadyStatus;
     [SyncVar]
     public int carId;
+    [SyncVar]
+    public int passedCheckPointNumber = 0;
+    [SyncVar]
+    public float timeAtLastPassedCheckPoint = 0;
+    [SyncVar]
+    public int numberOfPassedCheckpoints = 0;
+    [SyncVar]
+    public int lapsCompleted = 0;
+    [SyncVar]
+    public bool isRaceCompleted = false;
+    [SyncVar]
+    public int carPosition = 1;
+    [SyncVar]
+    public bool isHideRoutineRunning = false;
+    [SyncVar]
+    public float hideUIDelayTime;
 
     private TopDownCarController carController;
+
+    void Start()
+    {
+    }
 
     public void SetPlayer(string name, bool ownerStatus, string connId)
     {
@@ -51,18 +71,4 @@ public class NetworkPlayer : NetworkBehaviour
         base.OnStartClient();
         Debug.Log($"{playerName} joined the game, owner status: {isOwner}");
     }
-
-    private void Update()
-    {
-
-
-        if (isLocalPlayer)
-        {
-            Debug.Log("isLocalPlayer");
-        }
-        else
-        {
-            Debug.Log("notLocalPlayer");
-        }
-    }  
 }

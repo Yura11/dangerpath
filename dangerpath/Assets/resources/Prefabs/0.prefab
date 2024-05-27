@@ -10590,8 +10590,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6643688995138271935}
-  m_LocalRotation: {x: 0, y: 0, z: -0.89307326, w: 0.44991148}
-  m_LocalPosition: {x: 12.058, y: 9.286, z: -0.96999997}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.09740291, y: 0.1089171, z: 0.34898418}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10604,7 +10604,7 @@ Transform:
   - {fileID: 1554702692561725907}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -126.524}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7698135376164529500
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10691,7 +10691,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6643688995138271935}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 6200000, guid: 32941a9e69d23e648951c3c00bc3bc55, type: 2}
   m_IncludeLayers:
@@ -10917,7 +10917,8 @@ MonoBehaviour:
   accelerationFactor: 30
   turnFactor: 3.5
   maxSpeed: 6
-  rotationAngle: 0
+  initialRotationZ: 0
+  rotationAngle: -126.524
   ricochetForce: 10
 --- !u!114 &-9142730449602762061
 MonoBehaviour:
@@ -10939,6 +10940,14 @@ MonoBehaviour:
   connectionId: 
   playerReadyStatus: 0
   carId: 0
+  passedCheckPointNumber: 0
+  timeAtLastPassedCheckPoint: 0
+  numberOfPassedCheckpoints: 0
+  lapsCompleted: 0
+  isRaceCompleted: 0
+  carPosition: 1
+  isHideRoutineRunning: 0
+  hideUIDelayTime: 0
 --- !u!1001 &6223830490394964002
 PrefabInstance:
   m_ObjectHideFlags: 0

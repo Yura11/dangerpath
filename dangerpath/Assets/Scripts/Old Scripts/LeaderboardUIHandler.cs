@@ -6,23 +6,24 @@ using UnityEngine.UI;
 
 public class LeaderboardUIHandler : MonoBehaviour
 {
+
     public GameObject leaderboardItemPrefab;
 
     OnlinePositionHandler onlinePositionHandler;
     SetLeaderBoardItemInfo[] setLeaderboardItemInfo;
     public string[] WinnersList;
 
-   /* void Awake()
+    void Start()
     {
         onlinePositionHandler = FindObjectOfType<OnlinePositionHandler>();
-        setLeaderboardItemInfo = new SetLeaderBoardItemInfo[PhotonNetwork.PlayerList.Length];
+        setLeaderboardItemInfo = new SetLeaderBoardItemInfo[CrossScaneInfoHolder.PlayerList.Count];
         CreateLeaderBoardItems();
     }
 
     // Start is called before the first frame update
     void Update()
     {
-       /* if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             CreateLeaderBoardItems();
         }
@@ -63,11 +64,7 @@ public class LeaderboardUIHandler : MonoBehaviour
 
     public void UpdateList(List<CarLapCounter> lapCounters)
     {
-        if (!PhotonNetwork.IsConnected)
-        {
-            return;
-        } 
-        WinnersList = new string[PhotonNetwork.PlayerList.Length];
+        WinnersList = new string[CrossScaneInfoHolder.PlayerList.Count];
 
         for (int i = 0; i < lapCounters.Count; i++)
         {
@@ -80,5 +77,5 @@ public class LeaderboardUIHandler : MonoBehaviour
     public string GetWinners(int i)
     {
         return WinnersList[i];
-    }*/
+    }
 }

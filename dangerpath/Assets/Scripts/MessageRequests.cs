@@ -127,6 +127,11 @@ public struct AddPlayerMessage : NetworkMessage
 
 public struct SpawnPlayerRequest : NetworkMessage { }
 
+public struct OnPlayerPassedChecpoint : NetworkMessage 
+{
+    public NetworkPlayer player;
+}
+
 #region Delete in future 
 public struct LogPlayerNicknamesRequest : NetworkMessage { }
 #endregion

@@ -10690,7 +10690,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8420724306643472157}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 6200000, guid: 32941a9e69d23e648951c3c00bc3bc55, type: 2}
   m_IncludeLayers:
@@ -10878,6 +10878,7 @@ MonoBehaviour:
   accelerationFactor: 30
   turnFactor: 3.5
   maxSpeed: 20
+  initialRotationZ: 0
   rotationAngle: 0
   ricochetForce: 10
 --- !u!114 &1634872875305583750

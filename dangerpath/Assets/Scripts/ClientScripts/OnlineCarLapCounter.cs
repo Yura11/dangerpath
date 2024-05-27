@@ -1,12 +1,16 @@
-using System.Collections;
-using UnityEngine;
+using Mirror;
 using System;
-using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using UnityEngine;
+using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
-public class CarLapCounter : MonoBehaviour
+public class OnlineCarLapCounter : MonoBehaviour
 {
+    public NetworkPlayer myPlayer;
+
     GameManager gameManager;
     TopDownCarController topDownCarController;
 
@@ -14,32 +18,18 @@ public class CarLapCounter : MonoBehaviour
 
     private Stopwatch timer;
 
-    int passedCheckPointNumber = 0;
-    float timeAtLastPassedCheckPoint = 0;
-
-    int numberOfPassedCheckpoints = 0;
-
-    int lapsCompleted = 0;
-    const int lapsToComplete = 1;
-
     bool isRaceCompleted = false;
-
-    int carPosition = 1;
 
     bool isHideRoutineRunning = false;
     float hideUIDelayTime;
 
-    public event Action<CarLapCounter> OnPassCheckpoint;
+    public event Action<OnlineCarLapCounter> OnPassCheckpoint;
 
-    public static bool ReremoveConrol=false;
+    public static bool ReremoveConrol = false;
 
     private void Awake()
     {
-      //  gameManager = FindObjectOfType<GameManager>();
-    }
-    public void SetCarPosition(int position)
-    {
-        carPosition = position;
+        //  gameManager = FindObjectOfType<GameManager>();
     }
 
     public bool isRaceComplete()
@@ -47,22 +37,12 @@ public class CarLapCounter : MonoBehaviour
         return isRaceCompleted;
     }
 
-    public int GetNumberOfCheckpointsPassed()
-    {
-        return numberOfPassedCheckpoints;
-    }
-
-    public float GetTimeAtLastCheckPoint()
-    {
-        return timeAtLastPassedCheckPoint;
-    }
-
     // Початок корутини для відображення позиції гравця
     IEnumerator ShowPositionCO(float delayUntilHidePosition)
     {
         hideUIDelayTime += delayUntilHidePosition;
 
-        carPositionText.text = carPosition.ToString();
+        carPositionText.text = myPlayer.carPosition.ToString();
 
         carPositionText.gameObject.SetActive(true);
 
@@ -79,14 +59,13 @@ public class CarLapCounter : MonoBehaviour
     // Обробка зіткнення з чекпоінтом
     void OnTriggerEnter2D(Collider2D collider2D)
     {
-       // if(!PhotonNetwork.IsConnected)
-
+         if(myPlayer.playerName != CrossScaneInfoHolder.GamerNickName)
         {
             return;
         }
-       // if (collider2D.CompareTag("CheckPoints"))
+        if (collider2D.CompareTag("CheckPoints"))
         {
-            if (timer == null )
+            if (timer == null)
             {
                 timer = new Stopwatch();
                 timer.Start();
@@ -96,28 +75,31 @@ public class CarLapCounter : MonoBehaviour
                 return;
             CheckPoint checkPoint = collider2D.GetComponent<CheckPoint>();
 
-            if (passedCheckPointNumber + 1 == checkPoint.checkPointNumber)
+            if (myPlayer.passedCheckPointNumber + 1 == checkPoint.checkPointNumber)
             {
-                passedCheckPointNumber = checkPoint.checkPointNumber;
+                myPlayer.passedCheckPointNumber = checkPoint.checkPointNumber;
 
-                numberOfPassedCheckpoints++;
+                myPlayer.numberOfPassedCheckpoints++;
 
-                timeAtLastPassedCheckPoint = (float)timer.Elapsed.TotalSeconds;
+                myPlayer.timeAtLastPassedCheckPoint = (float)timer.Elapsed.TotalSeconds;
 
                 OnPassCheckpoint?.Invoke(this);
 
-               // timeAtLastPassedCheckPoint = Time.time;
+                OnPlayerPassedChecpoint request = new OnPlayerPassedChecpoint { player = myPlayer };
+                NetworkClient.Send(request);
+
+                // timeAtLastPassedCheckPoint = Time.time;
 
                 if (checkPoint.isFinishLine)
                 {
-                    passedCheckPointNumber = 0;
-                    lapsCompleted++;
+                    myPlayer.passedCheckPointNumber = 0;
+                    myPlayer.lapsCompleted++;
 
-                    if (lapsCompleted >= lapsToComplete)
+                   /* if (myPlayer.lapsCompleted >= GameRoom.NumberOfLaps)
                     {
                         isRaceCompleted = true;
                         gameManager.OnRaceEndForMe();
-                    }
+                    }*/
                 }
 
                 if (isRaceCompleted)

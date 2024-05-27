@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +5,11 @@ using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using System.Threading;
 
-// Визначення станів гри
-public enum GameStates {countDown, running, raceOver };
+public enum GameStates { countDown, running, raceOver };
 
 public class GameManager : MonoBehaviour
 {
-    bool Leftloby=false;
+    bool Leftloby = false;
     SpawnPlayers spawnPlayers;
     LeaderboardUIHandler leaderboardUIHandler;
     OnlinePositionHandler onlinePositionHandler;
@@ -21,35 +19,24 @@ public class GameManager : MonoBehaviour
     CarLapCounter[] carLapCounters;
     private List<int> availableActorNumbers = new List<int>();
 
-    // Статичний екземпляр GameManager для доступу з інших частин програми
     public static GameManager Instance = null;
 
-    // Змінна, що відображає поточний стан гри
-    GameStates gameState = GameStates.countDown;
+    public static GameStates gameState = GameStates.countDown;
 
     private void Awake()
     {
-     //   PhotonNetwork.AutomaticallySyncScene = true;
+        SetAllCollisionsEnabled(false);
         countDownUIHandler = FindObjectOfType<CountDownUIHandler>();
-       // leaderboardUIHandler = FindObjectOfType<LeaderboardUIHandler>();
-       // onlinePositionHandler = FindObjectOfType<OnlinePositionHandler>();
-     //   spawnPlayers = FindAnyObjectByType<SpawnPlayers>();
-     //   gameOverHandler = FindAnyObjectByType<GameOverHandler>();
-      //  waitingUIHandler = FindAnyObjectByType<WaitingUIHandler>();
-        // Перевірка, чи існує екземпляр GameManager
+
         if (Instance == null)
             Instance = this;
         else if (Instance != this)
         {
-            Destroy(gameObject);  // Знищення об'єкта, якщо інший екземпляр вже існує
+            Destroy(gameObject);
             return;
         }
-
-       // DontDestroyOnLoad(gameObject); // Забезпечення незнищенності цього об'єкта при завантаженні нових сцен
-      //  leaderboardUIHandler.gameObject.SetActive(false);
     }
 
-    // Ініціалізація гри
     void Start()
     {
         countDownUIHandler.CountDownStart();
@@ -57,29 +44,16 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        /* if (Input.GetKeyDown(KeyCode.Space))
-         {
-             Resetleaderboard();
-         }*/
-
         if (Leftloby)
             Resetleaderboard();
     }
-    // Логіка старту рівня
+
     void LevelStart()
     {
-       // if (/*PhotonNetwork.IsConnected*/)
-      //  {
-        //    gameState = GameStates.waiting; // Встановлення стану гри в режим
-       // }else
-        {
-            gameState= GameStates.running;
-        }
-
+        gameState = GameStates.countDown;
         Debug.Log("Level Started");
     }
 
-    // Функція для отримання поточного стану гри
     public GameStates GetGameState()
     {
         return gameState;
@@ -93,23 +67,16 @@ public class GameManager : MonoBehaviour
         {
             Destroy(carController.gameObject);
         }
-      //  waitingUIHandler.gameObject.SetActive(true);
-        countDownUIHandler.gameObject.SetActive(true);
-        countDownUIHandler.countDownText.text = " ";
-      //  leaderboardUIHandler.gameObject.SetActive(false) ;
     }
 
-    // Логіка старту гонки
     public void OnRaceStart()
     {
         Debug.Log("OnRaceStart");
-     //   spawnPlayers.RecolorPlayersObjects();
-     //   spawnPlayers.RenamePlayersObjects();
-       // Resetleaderboard();
+        SetAllCollisionsEnabled(true);
         carLapCounters = FindObjectsOfType<CarLapCounter>();
-        gameState = GameStates.running; // Зміна стану гри на "running"
+        MyCinemachine.Instance.SetCamera();
+        gameState = GameStates.running;
     }
-
 
     public void OnRaceEndForMe()
     {
@@ -120,7 +87,7 @@ public class GameManager : MonoBehaviour
             if (!lapCounter.isRaceComplete())
             {
                 allRaceComplete = false;
-                break;  // Якщо хоч один lapCounter.isRaceComplete() не є true, виходимо з циклу
+                break;
             }
         }
 
@@ -137,30 +104,44 @@ public class GameManager : MonoBehaviour
         gameState = GameStates.raceOver;
     }
 
-    // Підпис на подію завантаження сцени
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-      //  PhotonNetwork.AddCallbackTarget(this);
     }
 
-    // Логіка, що виконується при завантаженні нової сцени
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        LevelStart(); // Виклик методу LevelStart
+        LevelStart();
     }
-
-//    public override void OnPlayerLeftRoom(Player otherPlayer)
-  //  {
-  //      Leftloby = true;
- //   }
 
     private void Resetleaderboard()
     {
-       // onlinePositionHandler.FindPlayers();
-      //  leaderboardUIHandler.CreateLeaderBoardItems();
         onlinePositionHandler.InitializeLeaderboard();
         Debug.Log("List Updated");
         Leftloby = false;
+    }
+
+    public static void SetAllCollisionsEnabled(bool enabled)
+    {
+        // Find all 2D colliders in the scene
+        Collider2D[] colliders2D = FindObjectsOfType<PolygonCollider2D>();
+        foreach (var collider in colliders2D)
+        {
+            collider.enabled = enabled;
+        }
+
+        // Find all 3D colliders in the scene
+        Collider[] colliders3D = FindObjectsOfType<Collider>();
+        foreach (var collider in colliders3D)
+        {
+            collider.enabled = enabled;
+        }
+
+        Debug.Log("All colliders set to: " + enabled);
+    }
+
+    public void SortPlayerArry(GameRoom room)
+    {
+
     }
 }
