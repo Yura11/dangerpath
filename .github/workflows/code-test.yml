@@ -2,7 +2,7 @@ name: SonarCloud
 on:
   push:
     branches:
-      - main
+      - Yura11-patch-7
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
