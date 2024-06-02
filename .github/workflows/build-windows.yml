@@ -34,7 +34,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: StandaloneWindows64
-          projectPath: dagerpath/
+          projectPath: dagerpath
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
