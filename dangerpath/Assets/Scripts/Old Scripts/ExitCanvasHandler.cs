@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using Mirror;
 
 public class ExitCanvasHandler : MonoBehaviour
 {
@@ -31,18 +32,9 @@ public class ExitCanvasHandler : MonoBehaviour
 
     public void Menubutton()
     {
-       // if (PhotonNetwork.IsConnected)
-       // {
-            // PhotonNetwork.Disconnect();
-           // PhotonNetwork.LeaveLobby();
-            SceneManager.LoadScene("SampleScene");
-       // }
-        //else
-        {
-            Debug.LogError("Photon client is not connected.");
-            SceneManager.LoadScene("SampleScene");
-        }
-       
-   }
+        NetworkClient.Disconnect();
+        
+            SceneManager.LoadScene("Main");  
+    }
 
 }

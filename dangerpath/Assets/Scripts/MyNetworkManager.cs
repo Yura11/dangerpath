@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.SceneManagement;
 using System.Linq;
-using UnityEditor.MemoryProfiler;
+using Mirror.Examples.MultipleMatch;
 
 public class CustomNetworkManager : NetworkManager
 {
@@ -103,9 +103,46 @@ public class CustomNetworkManager : NetworkManager
         targetPlayer.carId = newData.carId;
     }
 
-    #region Delete in future 
+    public void OnServerDisconnect(NetworkConnection conn)
+    {
+        // Custom logic before calling the base method
+        Debug.Log($"Client {conn.connectionId} disconnected from the server.");
 
-    public void LogPlayerNicknames(GameRoom room)
+        // Remove the player from any room or game state management
+        RemovePlayerFromRoom(conn);
+    }
+
+    private void RemovePlayerFromRoom(NetworkConnection conn)
+    {
+        // Example logic to remove a player from a room based on their connection ID
+        foreach (var kvp in openMatches)
+        {
+            var room = kvp.Value;
+            var playerToRemove = room.Players.FirstOrDefault(p => p.connectionId == conn.connectionId.ToString());
+            if (playerToRemove != null)
+            {
+                room.Players.Remove(playerToRemove);
+                Debug.Log($"Player {playerToRemove.playerName} removed from room {room.RoomName}");
+
+                // If the player is the owner, remove the room
+                if (playerToRemove.isOwner)
+                {
+                    openMatches.Remove(room.RoomId);
+                    Debug.Log($"Room {room.RoomName} closed because the owner disconnected.");
+                }
+
+                break;
+            }
+            else
+            {
+                Debug.Log($"Player {playerToRemove.playerName} removed from room {room.RoomName}");
+            }
+        }
+    }
+
+#region Delete in future 
+
+public void LogPlayerNicknames(GameRoom room)
     {
         // Check if the room has any players
         if (room.Players.Count == 0)
@@ -476,9 +513,11 @@ public class CustomNetworkManager : NetworkManager
         }
     }
 
+
+
     #endregion
 
-                    #region Client System Callbacks
+    #region Client System Callbacks
     public override void OnStartClient()
     {
         base.OnStartClient();

@@ -41,14 +41,17 @@ public class TopDownCarController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if (GameManager.Instance.GetGameState() != GameStates.running)
+        if (isClient)
         {
+            if (GameManager.Instance.GetGameState() != GameStates.running)
+            {
+                ApplySteering();
+                return;
+            }
+            ApplyEngineForce();
+            KillOrthogonalVelocity();
             ApplySteering();
-            return;
         }
-        ApplyEngineForce();
-        KillOrthogonalVelocity();
-        ApplySteering();
     }
 
     void ApplyEngineForce()

@@ -70,35 +70,4 @@ public class RegistrationManagerTest
         // Assert
         Assert.IsFalse(result);
     }
-
-    /*[Test]
-    public IEnumerator CheckAccountExist_AccountExists_ReturnsErrorMessage()
-    {
-        Debug.Log("111");
-        string jsonData = "{\"username\":\"existing_user\",\"password\":\"existingpassword\",\"email\":\"existing@example.com\"}";
-        string expectedErrorMessage = "This Email or Username already in use!";
-
-        Debug.Log("1");
-
-        // Act
-        registrationManager.CheckAccountExist(jsonData);
-      
-        Debug.Log("2");
-        // Assert
-        Assert.AreEqual(expectedErrorMessage, registrationManager.GetLastErrorMessage());
-        
-    }
-
-    [Test]
-    public void CheckAccountExist_AccountDoesNotExist_ReturnsNoError()
-    {
-        string jsonData = "{\"username\":\"new_user\",\"password\":\"password123\",\"email\":\"new@example.com\"}";
-        string expectedErrorMessage = "Verify your email address!";
-
-         //Act
-        registrationManager.CheckAccountExist(jsonData);
-
-         //Assert
-        Assert.AreEqual(expectedErrorMessage, registrationManager.GetLastErrorMessage());
-    }*/
 }

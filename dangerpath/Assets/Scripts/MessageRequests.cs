@@ -132,6 +132,8 @@ public struct OnPlayerPassedChecpoint : NetworkMessage
     public NetworkPlayer player;
 }
 
+public struct LeaveGameRequest : NetworkMessage { }
+
 #region Delete in future 
 public struct LogPlayerNicknamesRequest : NetworkMessage { }
 #endregion
