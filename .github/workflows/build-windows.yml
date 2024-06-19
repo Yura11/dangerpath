@@ -19,7 +19,7 @@ jobs:
           lfs: true
 
       - name: List directory contents
-        run: ls -la /dangerpath
+        run: ls -la ./dangerpath
 
       # - name: Cache
       #   uses: actions/cache@v3
@@ -37,7 +37,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: StandaloneWindows64
-          projectPath: /dangerpath/dangerpath
+          projectPath: ./dangerpath
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
