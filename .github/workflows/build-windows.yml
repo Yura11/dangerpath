@@ -19,7 +19,7 @@ jobs:
           lfs: true
 
       - name: List directory contents
-        run: ls -la
+        run: ls -la /dangerpath
 
       # - name: Cache
       #   uses: actions/cache@v3
