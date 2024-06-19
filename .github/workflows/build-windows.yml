@@ -18,6 +18,9 @@ jobs:
         with:
           lfs: true
 
+      - name: List directory contents
+        run: ls -la
+
       # - name: Cache
       #   uses: actions/cache@v3
       #   with:
