@@ -1,0 +1,8 @@
+{
+    "RegisterUrl": "http://18.156.79.166/register.php",
+    "CheckAccountExistURL": "http://18.156.79.166/checkAccountExist.php",
+    "LogInUrl": "http://18.156.79.166/logIn.php",
+    "CheckLogInUrl": "http://18.156.79.166/checkLogInUrl.php",
+    "LogOutUrl": "http://18.156.79.166/logOut.php"
+}
+  

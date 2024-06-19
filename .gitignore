@@ -86,7 +86,6 @@ WebServer/package.json
 WebServer/nodeServerConfig.json
 WebServer/config.json
 WebServer/package-lock.json
-dangerpath/Assets/Resources/privatedata.json
 
 # Surfaces Lite asset
 dangerpath/Assets/Surfaces Lite/*
