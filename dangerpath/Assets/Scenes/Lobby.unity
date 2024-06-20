@@ -6313,7 +6313,7 @@ MonoBehaviour:
   offlineScene: 
   onlineScene: 
   transport: {fileID: 1717798943}
-  networkAddress: 18.156.79.166
+  networkAddress: 3.79.105.240
   maxConnections: 100
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60

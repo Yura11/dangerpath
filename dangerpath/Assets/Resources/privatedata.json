@@ -1,8 +1,7 @@
 {
-    "RegisterUrl": "http://18.156.79.166/register.php",
-    "CheckAccountExistURL": "http://18.156.79.166/checkAccountExist.php",
-    "LogInUrl": "http://18.156.79.166/logIn.php",
-    "CheckLogInUrl": "http://18.156.79.166/checkLogInUrl.php",
-    "LogOutUrl": "http://18.156.79.166/logOut.php"
+    "RegisterUrl": "http://3.79.105.240/register.php",
+    "CheckAccountExistURL": "http://3.79.105.240/checkAccountExist.php",
+    "LogInUrl": "http://3.79.105.240/logIn.php",
+    "CheckLogInUrl": "http://3.79.105.240/checkLogInUrl.php",
+    "LogOutUrl": "http://3.79.105.240/logOut.php"
 }
-  
