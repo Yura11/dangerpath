@@ -1,4 +1,4 @@
-name: Actions 😎 - Build for Windows ✨
+name: Actions 😎 - Build for MacOS ✨
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         
-      - name: Build project for Windows
+      - name: Build project for MacOS
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
